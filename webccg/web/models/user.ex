@@ -16,11 +16,12 @@ defmodule Webccg.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:username, :mail, :encrypted_password])
-    |> unique_constraint(:username, on: Webccg.Repo, downcase: true)
-    |> unique_constraint(:mail, on: Webccg.Repo, downcase: true)
-    |> validate_length(:password, min: 8)
-    |> validate_confirmation(:password)
-    |> validate_required([:username, :mail, :password, :password_confirmation])
+      |> cast(params, [:username, :mail, :password, :password_confirmation])
+      |> validate_required([:username, :mail, :password, :password_confirmation])
+      |> unique_constraint(:username, downcase: true)
+      |> unique_constraint(:mail, downcase: true)
+      |> validate_format(:mail, ~r/@/)
+      |> validate_length(:password, min: 8)
+      |> validate_confirmation(:password)
   end
 end

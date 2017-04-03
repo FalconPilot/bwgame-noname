@@ -28,7 +28,7 @@ header, main, footer {
 }
 
 form > div {
-  margin: 10px 0;
+  margin: 10px;
 }
 
 /*
@@ -64,7 +64,7 @@ main {
 }
 
 /*
-**  Structural classes
+**  Flex structural classes
 */
 
 .flex-wrapper {
@@ -73,13 +73,21 @@ main {
   justify-content: center;
 }
 
-.flex-wrapper.flex-col {
-  flex-direction: column;
-}
+.flex-wrapper.flex-col { flex-direction: column; }
+
+.flex-wrapper.flex-col.flex-start { align-items: flex-start; }
+
+.flex-wrapper.flex-start:not(.flex-col) { justify-content: flex-start; }
+
+.flex-wrapper.flex-stretch { align-items: stretch; }
 
 /*
 **  Standard classes
 */
+
+.medium-width {
+  width: 60%;
+}
 
 .standard-input {
   padding: 5px;

@@ -1,4 +1,4 @@
-<%= form_for @changeset, "/register", [ class: "flex-wrapper flex-col" ], fn f -> %>
+<%= form_for @changeset, "/register", [ class: "flex-wrapper flex-col medium" ], fn f -> %>
   <!-- Display errors -->
   <%= if f.errors != [] do %>
   <ul class="errors-wrapper">
@@ -14,6 +14,11 @@
   </div>
 
   <div class="flex-wrapper flex-col">
+    <label>Adresse mail</label>
+    <%= text_input f, :mail, class: "standard-input" %>
+  </div>
+
+  <div class="flex-wrapper flex-col">
     <label>Mot de passe</label>
     <%= password_input f, :password, class: "standard-input" %>
   </div>
@@ -22,4 +27,6 @@
     <label>Confirmation</label>
     <%= password_input f, :password_confirmation, class: "standard-input" %>
   </div>
+
+  <%= submit "Valider", class: "standard-btn" %>
 <% end %>

@@ -15,9 +15,17 @@
   <body>
     <!-- HEADER -->
     <header>
-      <h1>Elixir WebCCG</h1>
-      <div>
-      </div>
+      <h1 class="flex-wrapper flex-start">Elixir WebCCG</h1>
+      <%= form_for @loginset, "/login", [class: "flex-wrapper"], fn f -> %>
+        <div class="flex-wrapper flex-col">
+          <label>Pseudo</label>
+          <%= text_input f, :username, class: "standard-input" %>
+        </div>
+        <div class="flex-wrapper flex-col">
+          <label>Mot de passe</label>
+          <%= password_input f, :password, class: "standard-input" %>
+        </div>
+      <% end %>
     </header>
     <!-- MAIN CONTENT -->
     <main>
