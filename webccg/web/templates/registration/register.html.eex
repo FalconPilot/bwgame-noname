@@ -1,0 +1,25 @@
+<%= form_for @changeset, "/register", [ class: "flex-wrapper flex-col" ], fn f -> %>
+  <!-- Display errors -->
+  <%= if f.errors != [] do %>
+  <ul class="errors-wrapper">
+    <%= for {attr, message} <- f.errors do %>
+      <li><%= humanize(attr) %> <%= message %></li>
+    <% end %>
+  </ul>
+  <% end %>
+  <!-- Form fields -->
+  <div class="flex-wrapper flex-col">
+    <label>Pseudonyme</label>
+    <%= text_input f, :username, class: "standard-input" %>
+  </div>
+
+  <div class="flex-wrapper flex-col">
+    <label>Mot de passe</label>
+    <%= password_input f, :password, class: "standard-input" %>
+  </div>
+
+  <div class="flex-wrapper flex-col">
+    <label>Confirmation</label>
+    <%= password_input f, :password_confirmation, class: "standard-input" %>
+  </div>
+<% end %>

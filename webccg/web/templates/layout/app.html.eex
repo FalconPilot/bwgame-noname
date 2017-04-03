@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <!-- HEAD -->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="todo">
+    <meta name="author" content="falconpilot">
+
+    <title>Elixir WebCCG</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
+  <!-- BODY -->
+  <body>
+    <!-- HEADER -->
+    <header>
+      <h1>Elixir WebCCG</h1>
+      <div>
+      </div>
+    </header>
+    <!-- MAIN CONTENT -->
+    <main>
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+    <!-- FOOTER -->
+    <footer></footer>
+    <!-- SCRIPTS -->
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>
