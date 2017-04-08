@@ -26,6 +26,9 @@
           <%= password_input f, :password, class: "standard-input" %>
         </div>
       <% end %>
+      <%= if true do %>
+        <a href="/register" class="standard-btn">Inscription</a>
+      <% end %>
     </header>
     <!-- MAIN CONTENT -->
     <main>

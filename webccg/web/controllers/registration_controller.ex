@@ -3,8 +3,10 @@ defmodule Webccg.RegistrationController do
   alias Webccg.Password
 
   def new(conn, _params) do
-    changeset = User.changeset(%User{})
-    render conn, "register.html", changeset: changeset
+    conn
+      |> assign(:loginset, User.changeset(%User{}))
+      |> assign(:changeset, User.changeset(%User{}))
+      |> render("register.html")
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -15,7 +17,9 @@ defmodule Webccg.RegistrationController do
         |> put_session(:current_user, new_user)
         |> redirect(to: "/")
     else
-      render conn, "register.html", changeset: changeset
+      conn
+        |> assign(:changeset, changeset)
+        |> render("register.html")
     end
   end
 
