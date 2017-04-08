@@ -17,11 +17,15 @@ defmodule Webccg.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/users", PageController, :userlist
+    get "/users/:id", PageController, :user
 
     get "/register", RegistrationController, :new
     post "/register", RegistrationController, :create
 
-    post "/login", SessionController, :login
+    post "/login", SessionController, :create
+    get "/logout", SessionController, :logout
+
   end
 
   # Other scopes may use custom stacks.

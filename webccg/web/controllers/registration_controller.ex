@@ -1,25 +1,38 @@
 defmodule Webccg.RegistrationController do
   use Webccg.Web, :controller
   alias Webccg.Password
+  alias Webccg.Repo
 
+  # New user page
   def new(conn, _params) do
-    conn
-      |> assign(:loginset, User.changeset(%User{}))
-      |> assign(:changeset, User.changeset(%User{}))
-      |> render("register.html")
-  end
-
-  def create(conn, %{"user" => user_params}) do
-    changeset = User.changeset(%User{}, user_params)
-    if changeset.valid? do
-      new_user = Password.generate_and_store(changeset)
+    if !is_nil(get_session(conn, :current_user)) do
       conn
-        |> put_session(:current_user, new_user)
+        |> put_flash(:error, "Impossible de s'inscrire en étant connecté")
         |> redirect(to: "/")
     else
       conn
-        |> assign(:changeset, changeset)
-        |> render("register.html")
+        |> assign(:changeset, User.changeset(%User{}))
+        |> Webccg.PageController.display("register.html")
+    end
+  end
+
+  # Create new user
+  def create(conn, %{"user" => user_params}) do
+    # Create changeset with password
+    changeset = User.changeset(%User{}, user_params)
+      |> Password.generate_password
+
+    case Repo.insert(changeset) do
+      {:ok, new_user} ->
+        conn
+          |> put_session(:current_user, new_user)
+          |> redirect(to: "/")
+
+      {:error, _} ->
+        conn
+          |> put_flash(:error, "Paramètres invalides !")
+          |> assign(:changeset, changeset)
+          |> Webccg.PageController.display("register.html")
     end
   end
 

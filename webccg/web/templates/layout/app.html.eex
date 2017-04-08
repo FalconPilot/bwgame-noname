@@ -16,20 +16,35 @@
     <!-- HEADER -->
     <header>
       <h1 class="flex-wrapper flex-start">Elixir WebCCG</h1>
-      <%= form_for @loginset, "/login", [class: "flex-wrapper"], fn f -> %>
-        <div class="flex-wrapper flex-col">
-          <label>Pseudo</label>
-          <%= text_input f, :username, class: "standard-input" %>
-        </div>
-        <div class="flex-wrapper flex-col">
-          <label>Mot de passe</label>
-          <%= password_input f, :password, class: "standard-input" %>
-        </div>
-      <% end %>
-      <%= if true do %>
-        <a href="/register" class="standard-btn">Inscription</a>
+      <%= if @current_user do %>
+        <a href="/logout" class="standard-btn">Déconnexion</a>
+      <% else %>
+        <%= form_for @loginset, "/login", [class: "flex-wrapper"], fn f -> %>
+          <div class="flex-wrapper flex-col">
+            <label>Pseudo</label>
+            <%= text_input f, :username, class: "standard-input" %>
+          </div>
+          <div class="flex-wrapper flex-col">
+            <label>Mot de passe</label>
+            <%= password_input f, :password, class: "standard-input" %>
+          </div>
+          <%= submit "Connexion", class: "hidden" %>
+        <% end %>
+          <a href="/register" class="standard-btn">Inscription</a>
       <% end %>
     </header>
+    <!-- FLASH INFOS -->
+    <%= if info = get_flash(@conn, :info) do %>
+      <div class="flash-notice info">
+          <%= info %>
+      </div>
+    <% end %>
+    <!-- FLASH ERRORS -->
+    <%= if error = get_flash(@conn, :error) do %>
+      <div class="flash-notice error">
+        <%= error %>
+      </div>
+    <% end %>
     <!-- MAIN CONTENT -->
     <main>
       <%= render @view_module, @view_template, assigns %>

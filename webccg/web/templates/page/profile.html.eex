@@ -1,0 +1,6 @@
+<div class="flex-wrapper flex-col profile-wrapper">
+  <h1 class="page-title"><%= @pageuser.username %></h1>
+  <div>
+    <%= img_tag(@pageuser.avatar) %>
+  </div>
+</div>
