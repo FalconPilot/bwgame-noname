@@ -9,15 +9,14 @@ defmodule Webccg.Card do
     timestamps()
   end
 
-  @required_fields ~w(name description)
-  @optional_fields ~w(image)
+  @required_fields ~w(name description image)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def changeset(struct, params \\ %{}) do
-    cast(struct, params, @required_fields, @optional_fields)
-      |> validate_required([:name, :image, :description])
+    cast(struct, params, @required_fields)
+      |> validate_required(@required_fields)
       |> validate_length(:name, min: 3)
       |> validate_length(:description, min: 3)
   end

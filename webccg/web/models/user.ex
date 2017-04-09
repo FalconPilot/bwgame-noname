@@ -13,19 +13,19 @@ defmodule Webccg.User do
     timestamps()
   end
 
-  @required_fields ~w(username mail password password_confirmation)
+  @allowed_fields ~w(username mail password password_confirmation)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def changeset(struct, params \\ %{}) do
-    cast(struct, params, @required_fields)
-      |> validate_required([:username, :mail, :password, :password_confirmation])
+    cast(struct, params, @allowed_fields)
+      |> validate_required([:username, :mail, :password, :password_confirmation], message: "Tous les champs ne sont pas remplis")
       |> unique_constraint(:username, message: "Nom d'utilisateur déjà utilisé")
       |> unique_constraint(:mail, message: "Mail déjà utilisé")
-      |> validate_format(:mail, ~r/@/)
-      |> validate_length(:password, min: 8)
-      |> validate_confirmation(:password)
+      |> validate_format(:mail, ~r/@/, message: "Adresse mail invalide")
+      |> validate_length(:password, min: 8, message: "Mot de passe trop court (8 caractères minimum)")
+      |> validate_confirmation(:password, message: "Le mot de passe et la confirmation doivent être identiques")
       |> put_change(:avatar, "")
       |> put_change(:privilege, 1)
   end

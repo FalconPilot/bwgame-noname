@@ -25,15 +25,27 @@ defmodule Webccg.RegistrationController do
     case Repo.insert(changeset) do
       {:ok, new_user} ->
         conn
+          |> put_flash(:info, "Inscription réussie, #{new_user.username}")
           |> put_session(:current_user, new_user)
           |> redirect(to: "/")
 
       {:error, _} ->
+        IO.inspect Enum.map_reduce(changeset.errors, [], fn(x, acc) ->
+          {x, append_error(x, acc)}
+        end)
         conn
           |> put_flash(:error, "Paramètres invalides !")
           |> assign(:changeset, changeset)
           |> Webccg.PageController.display("register.html")
     end
+  end
+
+  def append_error({_key, {msg, _details}}, acc) do
+    [msg|acc]
+  end
+
+  def append_error(msg, acc) do
+    [msg|acc]
   end
 
 end

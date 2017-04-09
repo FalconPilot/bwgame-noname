@@ -123,6 +123,7 @@ main {
 }
 
 .standard-input {
+  min-width: 150px;
   padding: 5px;
   box-sizing: border-box;
   border-radius: 4px;
