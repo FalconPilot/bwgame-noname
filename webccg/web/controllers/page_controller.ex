@@ -6,8 +6,6 @@ defmodule Webccg.PageController do
   def display(conn, url) do
     conn
       |> assign(:loginset, User.changeset(%User{}))
-      |> assign(:current_user, get_session(conn, :current_user))
-      |> assign(:current_page, conn.request_path)
       |> render(url)
   end
 
@@ -33,6 +31,10 @@ defmodule Webccg.PageController do
               |> put_flash(:error, "Utilisateur inconnu")
               |> redirect(to: "/users")
           user ->
+            if user == get_session(conn, :current_user) do
+              conn
+                |> assign(:user_set, %User{})
+            end
             conn
               |> assign(:pageuser, user)
               |> display("profile.html")

@@ -1,0 +1,7 @@
+<div class="flex-wrapper flex-col flex-top flex-1">
+  <%= if user = get_user(@conn) do %>
+    <h1>Bienvenue <%= user.username %> !</h1>
+  <% else %>
+    <h1>Bienvenue !</h1>
+  <% end %>
+</div>

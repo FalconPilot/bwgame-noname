@@ -1,6 +1,11 @@
-<div class="flex-wrapper flex-col profile-wrapper">
+<div class="flex-wrapper flex-col flex-top flex-1 panel-wrapper">
   <h1 class="page-title"><%= @pageuser.username %></h1>
   <div>
     <%= img_tag(@pageuser.avatar) %>
+    <div class="flex-wrapper flex-col">
+      <%= if user = get_user(@conn) do %>
+        <p>Changer le mot de passe</p>
+      <% end %>
+    </div>
   </div>
 </div>

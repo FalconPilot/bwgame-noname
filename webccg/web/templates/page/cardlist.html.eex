@@ -1,5 +1,7 @@
 <%= if Enum.count(@userlist) > 0 do %>
   <div class="flex-wrapper">
+    <%= if is_admin?(@conn) do %>
+    <% end %>
     <%= for card <- @cardlist do %>
       <div class="card-wrapper card-loading" id="card_<%= card.id %>">
       </div>

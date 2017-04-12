@@ -1,6 +1,6 @@
 <%= if Enum.count(@userlist) > 0 do %>
   <%= for user <- @userlist do %>
-    <div class="flex-wrapper userlist-wrapper">
+    <div class="flex-wrapper flex-1 panel-wrapper">
       <%= img_tag(user.avatar) %>
       <div class="userlist-body">
         <%= link(user.username, to: "/users/#{user.id}") %>
