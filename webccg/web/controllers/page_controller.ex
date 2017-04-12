@@ -27,7 +27,7 @@ defmodule Webccg.PageController do
   def user(conn, %{"id" => user_id}) do
     case Integer.parse(user_id) do
       {id, _} ->
-        case Repo.get_by(User, id: user_id) do
+        case Repo.get_by(User, id: id) do
           nil ->
             conn
               |> put_flash(:error, "Utilisateur inconnu")

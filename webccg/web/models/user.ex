@@ -1,4 +1,5 @@
 defmodule Webccg.User do
+  import Comeonin.Bcrypt, only: [hashpwsalt: 1]
   use Webccg.Web, :model
 
   schema "users" do
@@ -28,5 +29,17 @@ defmodule Webccg.User do
       |> validate_confirmation(:password, message: "Le mot de passe et la confirmation doivent être identiques")
       |> put_change(:avatar, "")
       |> put_change(:privilege, 1)
+      |> hash_password
+  end
+
+  # Hash password
+  defp hash_password(changeset) do
+    if password = get_field(changeset, :password) do
+      changeset
+        |> put_change(:encrypted_password, hashpwsalt(password))
+    else
+      changeset
+        |> add_error(:encrypted_password, "No password provided")
+    end
   end
 end

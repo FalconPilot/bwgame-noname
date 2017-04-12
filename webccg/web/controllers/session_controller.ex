@@ -1,6 +1,5 @@
 defmodule Webccg.SessionController do
   use Webccg.Web, :controller
-  alias Webccg.Password
 
   # Initialize session
   def create(conn, %{"user" => user_params}) do

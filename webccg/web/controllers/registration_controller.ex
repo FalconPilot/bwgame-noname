@@ -1,6 +1,5 @@
 defmodule Webccg.RegistrationController do
   use Webccg.Web, :controller
-  alias Webccg.Password
   alias Webccg.Repo
 
   # New user page
@@ -20,7 +19,6 @@ defmodule Webccg.RegistrationController do
   def create(conn, %{"user" => user_params}) do
     # Create changeset with password
     changeset = User.changeset(%User{}, user_params)
-      |> Password.generate_password
 
     case Repo.insert(changeset) do
       {:ok, new_user} ->
