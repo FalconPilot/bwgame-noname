@@ -20,6 +20,8 @@ defmodule Webccg.Router do
     get "/users", PageController, :userlist
     get "/users/:id", PageController, :user
 
+    get "/cards", PageController, :cardlist
+
     get "/register", RegistrationController, :new
     post "/register", RegistrationController, :create
 

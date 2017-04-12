@@ -1,0 +1,10 @@
+<%= if Enum.count(@userlist) > 0 do %>
+  <div class="flex-wrapper">
+    <%= for card <- @cardlist do %>
+      <div class="card-wrapper card-loading" id="card_<%= card.id %>">
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div>Aucune carte</div>
+<% end %>

@@ -35,7 +35,7 @@ defmodule Webccg.PageController do
           user ->
             conn
               |> assign(:pageuser, user)
-              |> display("user.html")
+              |> display("profile.html")
         end
       :error ->
         conn
