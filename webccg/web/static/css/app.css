@@ -74,6 +74,23 @@ main {
 }
 
 /*
+**  App footer
+*/
+
+footer {
+  padding: 5px 10px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.5em;
+}
+
+footer > img {
+  margin-left: 0.5em;
+  max-height: 1.2em;
+}
+
+/*
 **  Flex structural classes
 */
 

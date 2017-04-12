@@ -51,7 +51,7 @@
       <%= render @view_module, @view_template, assigns %>
     </main>
     <!-- FOOTER -->
-    <footer>Powered by <img src="<%= static_path(@conn, "/assets/images/phoenix.png") %>"</footer>
+    <footer>Powered by <img src="<%= static_path(@conn, "/images/phoenix.png") %>"</footer>
     <!-- SCRIPTS -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
