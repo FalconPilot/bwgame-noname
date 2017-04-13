@@ -32,6 +32,7 @@ defmodule Webccg.Web do
 
       alias Webccg.Repo
       alias Webccg.User
+      alias Webccg.Card
       import Ecto
       import Ecto.Query
 

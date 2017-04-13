@@ -1,6 +1,6 @@
 defmodule Webccg.PageController do
-  alias Webccg.Repo
   use Webccg.Web, :controller
+  alias Webccg.Repo
 
   # Default page rendering
   def display(conn, url) do
@@ -50,6 +50,22 @@ defmodule Webccg.PageController do
   def cardlist(conn, _params) do
     conn
       |> assign(:cardlist, Repo.all(Card))
+      |> assign_admin(:cardform, Card.changeset(%Card{}))
       |> display("cardlist.html")
+  end
+
+  # Assign if admin
+  defp assign_admin(conn, key, value) do
+    case user = get_session(conn, :current_user) do
+      nil ->
+        conn
+
+      user ->
+        if user.privilege >= 3 do
+          conn |> assign(key, value)
+        else
+          conn
+        end
+    end
   end
 end

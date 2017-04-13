@@ -31,9 +31,7 @@ body {
 
 header, main, footer { width: 100%; }
 
-form > div {
-  margin: 5px;
-}
+form > div { margin: 5px; }
 
 a {
   text-decoration: none;
@@ -41,6 +39,8 @@ a {
 }
 
 p, h1, h2, h3 { margin: 0; }
+
+textarea, input { box-sizing: border-box; }
 
 
 /*
@@ -91,6 +91,11 @@ footer > img {
 .flex-wrapper.flex-col { flex-direction: column; }
 
 .flex-wrapper.flex-stretch { align-items: stretch; }
+
+.flex-wrapper.flex-wrap { flex-wrap: wrap; }
+
+.flex-wrapper.flex-around { justify-content: space-around; }
+.flex-wrapper.flex-between { justify-content: space-between; }
 
 .flex-1 { flex: 1; }
 
@@ -155,10 +160,12 @@ footer > img {
   width: 60%;
 }
 
-.standard-input {
-  min-width: 150px;
+.standard-input { min-width: 150px; }
+
+.standard-textarea { resize: none; }
+
+.standard-input, .standard-textarea {
   padding: 5px;
-  box-sizing: border-box;
   border-radius: 4px;
   border: 1px solid #333;
 }
@@ -206,4 +213,142 @@ footer > img {
 .panel-wrapper {
   width: var(--panel-width);
   background-color: rgba(50, 50, 50, 0.4);
+}
+
+/*
+**  Card wrapper
+*/
+
+.card-wrapper {
+  position: relative;
+  height: 320px;
+  width: 200px;
+  margin: 5px;
+  box-sizing: content-box;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #333;
+  border-radius: 5px;
+  border: 8px solid #111;
+}
+
+.card-wrapper:not(.generator) > h2 {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  color: #FFF;
+  text-align: center;
+  font-variant: small-caps;
+  background-color: #555;
+}
+
+.card-wrapper > .img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  border: 2px solid #111;
+  box-shadow: 0px 0px 5px #111 inset;
+}
+
+.card-wrapper > .img-wrapper > img {
+  width: 100%;
+  height: 100%;
+}
+
+.card-wrapper:not(.generator) > p.card-desc {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  font-style: italic;
+  color: #FFF;
+  font-size: 0.6em;
+  text-align: justify;
+  overflow: auto;
+}
+
+.card-wrapper:not(.generator) > p:not(.card-desc) {
+  width: 100%;
+  padding: 1px 5px;
+  box-sizing: border-box;
+  color: #FFF;
+  font-size: 0.5em;
+}
+
+.delete-btn {
+  color: #FFF;
+  text-shadow: 0px 0px 3px #111;
+  font-style: normal;
+  font-size: 1.5em;
+}
+
+.card-rarity {
+  margin-top: 5px;
+  box-sizing: border-box;
+  color: #FC0;
+  text-shadow: 0px 0px 1px #FC0;
+}
+
+.card-rarity > p {
+  margin: 0 3px;
+}
+
+/*
+**  Card generator classes
+*/
+
+.card-wrapper.generator > p,
+.card-wrapper.generator > div {
+  width: 100%;
+}
+
+.card-wrapper.generator > p {
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.card-wrapper.generator > p > input,
+.card-wrapper.generator > p > textarea {
+  width: 100%;
+}
+
+.card-wrapper.generator > p > label,
+.card-wrapper.generator > div > label {
+  margin-bottom: 5px;
+  color: #FFF;
+  text-align: center;
+}
+
+.card-wrapper.generator > div > p > span {
+  color: #FC0;
+}
+
+/*
+**  Loading card
+*/
+
+.card-wrapper.card-loading:before {
+  content: "Chargement";
+  position: absolute;
+  margin: auto;
+  font-size: 0.5em;
+  color: var(--main-color);
+  text-shadow: 0px 0px 1px var(--main-color);
+  z-index: 2;
+}
+
+.card-wrapper.card-loading:after {
+  content: " ";
+  position: absolute;
+  height: 4em;
+  width: 4em;
+  margin: auto;
+  border-width: 2px;
+  border-style: dashed;
+  border-color: var(--main-color);
+  background-color: rgba(80, 80, 80, 0.4);
+  border-radius: 50%;
+  transition: 0.2s;
+  animation: cardloading 2.5s linear infinite;
 }

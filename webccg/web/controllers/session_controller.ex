@@ -5,7 +5,7 @@ defmodule Webccg.SessionController do
   def create(conn, %{"user" => user_params, "redirect" => url}) do
     user =
       if is_nil(user_params["username"]) do
-          nil
+        nil
       else
         Repo.get_by(User, username: user_params["username"])
       end
