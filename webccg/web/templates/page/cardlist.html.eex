@@ -48,12 +48,12 @@
       <div class="card-wrapper">
         <h2><%= card.name %></h2>
         <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
-        <div class="flex-wrapper card-rarity"><%= card.rarity %></div>
+        <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
         <p class="card-desc flex-1"><%= card.description %></p>
         <p class="flex-wrapper flex-between">
           Carte #<%= card.id %>
           <%= if is_admin?(@conn) do %>
-            <%= link("x", to: "/delete_card?cid=#{card.id}", class: "delete-btn") %>
+            <%= link("x", to: "/delete_card?cid=#{card.id}", class: "standard-btn delete-btn") %>
           <% end %>
         </p>
       </div>
