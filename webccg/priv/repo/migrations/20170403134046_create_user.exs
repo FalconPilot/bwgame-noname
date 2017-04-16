@@ -8,6 +8,7 @@ defmodule Webccg.Repo.Migrations.CreateUser do
       add :avatar, :string
       add :privilege, :integer
       add :encrypted_password, :string
+      add :cards, {:array, :map}
 
       timestamps()
     end

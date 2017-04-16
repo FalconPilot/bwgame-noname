@@ -16,10 +16,13 @@
     <!-- HEADER -->
     <header class="flex-wrapper">
       <h1 class="flex-wrapper flex-left">Elixir WebCCG</h1>
+      <!-- Logged in buttons -->
       <%= if user = get_user(@conn) do %>
         <%= link("Profil", to: "/users/#{user.id}", class: "standard-btn") %>
         <%= link("Déconnexion", to: "/logout", class: "standard-btn") %>
+      <!-- Logged out buttons -->
       <% else %>
+        <!-- Login form -->
         <%= form_for @loginset, "/login?redirect=#{@conn.request_path}", [class: "flex-wrapper"], fn f -> %>
           <div class="flex-wrapper flex-col">
             <label>Pseudo</label>
@@ -31,8 +34,10 @@
           </div>
           <%= submit "➤", class: "standard-btn hidden", title: "Connexion" %>
         <% end %>
-          <%= link("Inscription", to: "/register", class: "standard-btn") %>
+        <!-- Register -->
+        <%= link("Inscription", to: "/register", class: "standard-btn") %>
       <% end %>
+      <!-- Common buttons -->
       <%= link("Membres", to: "/users", class: "standard-btn") %>
       <%= link("Accueil", to: "/", class: "standard-btn") %>
     </header>

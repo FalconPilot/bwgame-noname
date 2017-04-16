@@ -8,6 +8,9 @@ defmodule Webccg.User do
     field :mail, :string
     field :privilege, :integer
     field :encrypted_password, :string
+    field :cards, {:array, :map}
+
+    # Virtual fields
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
 
@@ -29,6 +32,7 @@ defmodule Webccg.User do
       |> validate_confirmation(:password, message: "Le mot de passe et la confirmation doivent être identiques")
       |> put_change(:avatar, "")
       |> put_change(:privilege, 1)
+      |> put_change(:cards, [])
       |> hash_password
   end
 

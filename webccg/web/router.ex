@@ -29,7 +29,6 @@ defmodule Webccg.Router do
     get "/register", RegistrationController, :new
     post "/register", RegistrationController, :create
 
-
     post "/login", SessionController, :create
     get "/logout", SessionController, :logout
 
