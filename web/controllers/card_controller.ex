@@ -3,12 +3,30 @@ defmodule Webccg.CardController do
 
   # Create new card
   def new(conn, %{"card" => card_params}) do
-    changeset = Card.changeset(%Card{}, card_params)
-
-    case Repo.insert(changeset) do
+    # Define changeset
+    changeset =
+      case Repo.get_by(Card, name: card_params["name"]) do
+        nil ->
+          Card.changeset(%Card{}, card_params)
+        card ->
+          # Format params and update changeset
+          params = Enum.map(card_params, fn({k, v}) ->
+            value =
+              case Integer.parse(v) do
+                {int, _point} ->
+                  int
+                _ ->
+                  v
+              end
+            {String.to_atom(k), value}
+          end)
+          Ecto.Changeset.change(card, params)
+      end
+    # Insert or update card
+    case Repo.insert_or_update(changeset) do
       {:ok, new_card} ->
         conn
-          |> put_flash(:info, "Carte n°#{new_card.id} créée avec succès !")
+          |> put_flash(:info, "Carte \"#{new_card.name}\" créée avec succès !")
           |> redirect(to: "/cards")
 
       {:error, _} ->
@@ -62,7 +80,7 @@ defmodule Webccg.CardController do
               case Repo.all(query) do
                 [] ->
                   conn
-                    |> put_flash(:error, "Aucune carte #{rarity}* !")
+                    |> put_flash(:error, "Aucune carte #{rarity}★ !")
                     |> redirect(to: url)
                 cards ->
                   give_to(conn, user, Enum.random(cards), url)
