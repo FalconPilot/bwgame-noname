@@ -7,6 +7,7 @@ defmodule Webccg.Repo.Migrations.CreateCard do
       add :description, :string
       add :image, :string
       add :rarity, :integer
+      add :display_id, :integer
 
       timestamps()
     end

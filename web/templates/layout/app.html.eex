@@ -71,7 +71,7 @@
           <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
           <p class="card-desc flex-1"><%= card.description %></p>
           <p class="flex-wrapper">
-            <span class="flex-1">Carte #<%= card.id %></span>
+            <span class="flex-1">Carte #<%= card.display_id %></span>
           </p>
         </div>
       </div>

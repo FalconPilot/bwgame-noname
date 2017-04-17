@@ -115,6 +115,26 @@ defmodule Webccg.CardController do
     end
   end
 
+  # Reorder card IDs
+  def reorder_ids(conn, _params) do
+    if is_admin?(conn) do
+      cards = Enum.sort_by(Repo.all(Card), fn(x) ->
+        x.inserted_at
+      end)
+      Enum.each(Enum.with_index(cards), fn({x, i}) ->
+        card = Ecto.Changeset.change(x, display_id: i + 1)
+        Repo.update!(card)
+      end)
+      conn
+        |> put_flash(:info, "ID des cartes réordonnés")
+        |> redirect(to: "/")
+    else
+      conn
+        |> put_flash(:error, "Vous devez être administrateur !")
+        |> redirect(to: "/")
+    end
+  end
+
   # Give card to user
   defp give_to(conn, user, card, url) do
     # Update changeset

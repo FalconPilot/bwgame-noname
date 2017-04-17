@@ -6,11 +6,12 @@ defmodule Webccg.Card do
     field :rarity, :integer
     field :image, :string
     field :description, :string
+    field :display_id, :integer
 
     timestamps()
   end
 
-  @allowed_fields ~w(name description image rarity)
+  @allowed_fields ~w(name description image rarity display_id)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.

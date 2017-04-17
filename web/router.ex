@@ -30,6 +30,8 @@ defmodule Webccg.Router do
     get "/obtain", CardController, :obtain
     get "/giveto", CardController, :give_card
 
+    get "/test", CardController, :reorder_ids
+
     get "/register", RegistrationController, :new
     post "/register", RegistrationController, :create
 
