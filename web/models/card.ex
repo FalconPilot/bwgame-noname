@@ -7,11 +7,12 @@ defmodule Webccg.Card do
     field :image, :string
     field :description, :string
     field :display_id, :integer
+    field :group, :string
 
     timestamps()
   end
 
-  @allowed_fields ~w(name description image rarity display_id)
+  @allowed_fields ~w(name description image rarity display_id group)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
@@ -21,5 +22,6 @@ defmodule Webccg.Card do
       |> validate_required([:name, :description, :image, :rarity])
       |> validate_length(:name, min: 3)
       |> validate_length(:description, min: 3)
+      |> validate_length(:group, min: 3)
   end
 end

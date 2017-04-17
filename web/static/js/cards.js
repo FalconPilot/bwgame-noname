@@ -2,7 +2,7 @@
 **  Rarity input listeners
 */
 
-getClass("rarity").forEach(function(node) {
+getName("rarity").forEach(function(node) {
   node
     .parentNode
     .getElementsByTagName('INPUT')[0]
@@ -124,11 +124,15 @@ function addOverlay(overlayId, wrapper) {
 }
 
 /*
-**  Get elements from class
+**  Get elements from selector
 */
 
 function getClass(className) {
   return [].slice.call(document.getElementsByClassName(className));
+}
+
+function getName(name) {
+  return [].slice.call(document.getElementsByName(name));
 }
 
 /*

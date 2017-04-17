@@ -1,4 +1,4 @@
-<div class="flex-wrapper flex-col flex-top flex-1 flex-stretch  panel-wrapper">
+<div class="flex-wrapper flex-col flex-top flex-1 flex-stretch panel-wrapper">
   <h1 class="page-title no-margin"><%= adapted_title("Profil", @pageuser.username) %></h1>
   <div class="flex-wrapper flex-stretch">
     <!-- Avatar -->
@@ -40,8 +40,9 @@
   <!-- Liste de cartes -->
   <div class="flex-wrapper flex-wrap">
     <%= for %{card: card, amount: amount} <- @pagecards do %>
-      <div class="card-wrapper">
-        <h2><%= card.name %></h2>
+      <div class="card-wrapper rarity-<%= card.rarity %>">
+        <h2 class="bg-<%= String.downcase(card.group) %>"><%= card.name %></h2>
+        <h3 class="bg-<%= String.downcase(card.group) %>"><%= card.group %></h3>
         <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
         <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
         <p class="card-desc flex-1"><%= card.description %></p>

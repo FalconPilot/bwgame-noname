@@ -1,5 +1,5 @@
 <%= if Enum.count(@cardlist) > 0 or is_admin?(@conn) do %>
-  <div class="flex-wrapper flex-wrap">
+  <div class="flex-wrapper flex-wrap flex-1">
     <%= if is_admin?(@conn) do %>
       <%= form_for @cardform, "/newcard", [class: "card-wrapper generator"], fn f -> %>
         <!-- Display id -->
@@ -13,6 +13,11 @@
         <p class="flex-wrapper flex-col">
           <label>URL de l'image</label>
           <%= text_input f, :image, class: "standard-input" %>
+        </p>
+        <!-- Group -->
+        <p class="flex-wrapper flex-col">
+          <label>Groupe</label>
+          <%= text_input f, :group, class: "standard-input" %>
         </p>
         <!-- Rarity -->
         <div class="flex-wrapper flex-around" style="width: 100%;">
@@ -47,8 +52,9 @@
       <% end %>
     <% end %>
     <%= for card <- @cardlist do %>
-      <div class="card-wrapper">
-        <h2><%= card.name %></h2>
+      <div class="card-wrapper rarity-<%= card.rarity %>">
+        <h2 class="bg-<%= String.downcase(card.group) %>"><%= card.name %></h2>
+        <h3 class="bg-<%= String.downcase(card.group) %>"><%= card.group %></h3>
         <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
         <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
         <p class="card-desc flex-1"><%= card.description %></p>
@@ -63,5 +69,5 @@
     <% end %>
   </div>
 <% else %>
-  <div>Aucune carte</div>
+  <div class="self-middle">Aucune carte</div>
 <% end %>
