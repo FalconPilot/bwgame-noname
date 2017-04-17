@@ -9,7 +9,7 @@
     <div class="flex-1 flex-wrapper flex-col flex-stretch">
       <div class="flex-wrapper flex-col flex-1">
       </div>
-      <%= if user = can_modify?(@conn, @pageuser.id) do %>
+      <%= if can_modify?(@conn, @pageuser.id) do %>
         <%= form_tag("/users/update", class: "flex-wrapper flex-col flex-stretch", method: "post") %>
           <!-- Hidden input -->
           <%= hidden_input :user, :id, value: @pageuser.id %>

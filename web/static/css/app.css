@@ -222,6 +222,8 @@ footer > img {
   opacity: 0.6;
 }
 
+.standard-btn.important { background-color: var(--info-color); }
+
 .standard-btn:disabled:hover { cursor: not-allowed; }
 
 .standard-btn:not(:disabled):hover {

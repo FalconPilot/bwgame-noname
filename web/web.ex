@@ -58,6 +58,9 @@ defmodule Webccg.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
+      # Import helpers
+      import Webccg.CommonHelpers
+
       import Webccg.Router.Helpers
       import Webccg.ErrorHelpers
       import Webccg.Gettext

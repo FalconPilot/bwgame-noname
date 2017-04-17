@@ -55,7 +55,7 @@ defmodule Webccg.PageController do
 
   # Assign if admin
   defp assign_admin(conn, key, value) do
-    case user = get_session(conn, :current_user) do
+    case get_session(conn, :current_user) do
       nil ->
         conn
       user ->

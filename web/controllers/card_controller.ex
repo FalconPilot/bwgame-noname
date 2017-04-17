@@ -43,34 +43,55 @@ defmodule Webccg.CardController do
 
   # Get random card
   def obtain(conn, %{"userid" => userid}) do
-    url = "/users/#{userid}"
-    # Check if user exist
-    case Repo.get(User, userid) do
+    if obtain_valid?(conn, userid) do
+      url = "/users/#{userid}"
+      # Check if user exist
+      case Repo.get(User, userid) do
+        nil ->
+          conn
+            |> put_flash(:error, "Utilisateur invalide")
+            |> redirect(to: url)
+        user ->
+          now = Date.utc_today
+          # Check if user can obtain card
+          case Date.compare(now, Date.from_iso8601!(user.last_obtained)) do
+            # Can obtain card
+            :gt ->
+              rarity = CardHelpers.get_rarity
+              query = from(c in Card, [where: c.rarity == ^rarity])
+              case Repo.all(query) do
+                [] ->
+                  conn
+                    |> put_flash(:error, "Aucune carte #{rarity}* !")
+                    |> redirect(to: url)
+                cards ->
+                  give_to(conn, user, Enum.random(cards), url)
+              end
+            # Cannot obtain card
+            _ ->
+              conn
+                |> put_flash(:error, "Carte déjà obtenue aujourd'hui !")
+                |> redirect(to: url)
+          end
+      end
+    else
+      conn
+        |> put_flash(:error, "Requête invalide !")
+        |> redirect(to: "/")
+    end
+  end
+
+  # Define if request is valid
+  defp obtain_valid?(conn, id) do
+    case get_session(conn, :current_user) do
       nil ->
-        conn
-          |> put_flash(:error, "Utilisateur invalide")
-          |> redirect(to: url)
+        false
       user ->
-        now = Date.utc_today
-        # Check if user can obtain card
-        case Date.compare(now, Date.from_iso8601!(user.last_obtained)) do
-          # Can obtain card
-          :gt ->
-            rarity = CardHelpers.get_rarity
-            query = from(c in Card, [where: c.rarity == ^rarity])
-            case Repo.all(query) do
-              [] ->
-                conn
-                  |> put_flash(:error, "Aucune carte #{rarity}* !")
-                  |> redirect(to: url)
-              cards ->
-                give_to(conn, user, Enum.random(cards), url)
-            end
-          # Cannot obtain card
+        case Integer.parse(id) do
+          {int, _point} ->
+            int == user.id or user.privilege >= 2
           _ ->
-            conn
-              |> put_flash(:error, "Carte déjà obtenue aujourd'hui !")
-              |> redirect(to: url)
+            false
         end
     end
   end
@@ -96,13 +117,6 @@ defmodule Webccg.CardController do
 
   # Give card to user
   defp give_to(conn, user, card, url) do
-    # Define new cardlist
-    case user.cards do
-      [] ->
-        new_list = [%{"id" => card.id, "amount" => 1}]
-      _ ->
-        new_list = add_card(user.cards, card.id)
-    end
     # Update changeset
     user = Ecto.Changeset.change(user, %{
       last_obtained: Date.to_string(Date.utc_today),
