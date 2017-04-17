@@ -3,36 +3,42 @@ defmodule Webccg.CardController do
 
   # Create new card
   def new(conn, %{"card" => card_params}) do
-    # Define changeset
-    changeset =
-      case Repo.get_by(Card, name: card_params["name"]) do
-        nil ->
-          Card.changeset(%Card{}, card_params)
-        card ->
-          # Format params and update changeset
-          params = Enum.map(card_params, fn({k, v}) ->
-            value =
-              case Integer.parse(v) do
-                {int, _point} ->
-                  int
-                _ ->
-                  v
-              end
-            {String.to_atom(k), value}
-          end)
-          Ecto.Changeset.change(card, params)
-      end
-    # Insert or update card
-    case Repo.insert_or_update(changeset) do
-      {:ok, new_card} ->
-        conn
-          |> put_flash(:info, "Carte \"#{new_card.name}\" créée avec succès !")
-          |> redirect(to: "/cards")
+    if is_admin?(conn) do
+      # Define changeset
+      changeset =
+        case Repo.get_by(Card, name: card_params["name"]) do
+          nil ->
+            Card.changeset(%Card{}, card_params)
+          card ->
+            # Format params and update changeset
+            params = Enum.map(card_params, fn({k, v}) ->
+              value =
+                case Integer.parse(v) do
+                  {int, _point} ->
+                    int
+                  _ ->
+                    v
+                end
+              {String.to_atom(k), value}
+            end)
+            Ecto.Changeset.change(card, params)
+        end
+      # Insert or update card
+      case Repo.insert_or_update(changeset) do
+        {:ok, new_card} ->
+          conn
+            |> put_flash(:info, "Carte \"#{new_card.name}\" créée avec succès !")
+            |> redirect(to: "/cards")
 
-      {:error, _} ->
-        conn
-          |> put_flash(:error, "Carte invalide !")
-          |> redirect(to: "/cards")
+        {:error, _} ->
+          conn
+            |> put_flash(:error, "Carte invalide !")
+            |> redirect(to: "/cards")
+      end
+    else
+      conn
+        |> put_flash(:error, "Vous devez être administrateur !")
+        |> redirect(to: "/cards")
     end
   end
 
