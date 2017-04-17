@@ -2,7 +2,7 @@
 **  Rarity input listeners
 */
 
-[].slice.call(document.getElementsByName('rarity')).forEach(function(node) {
+getClass("rarity").forEach(function(node) {
   node
     .parentNode
     .getElementsByTagName('INPUT')[0]
@@ -22,7 +22,7 @@
 **  Card rarity display
 */
 
-[].slice.call(document.getElementsByClassName('card-rarity')).forEach(function(node) {
+getClass("card-rarity").forEach(function(node) {
   let rarity = parseInt(node.innerHTML);
   node.innerHTML = "";
   for (let i = 0; i < rarity; i++) {
@@ -36,7 +36,7 @@
 **  Card giving buttons
 */
 
-[].slice.call(document.getElementsByClassName('give-card')).forEach(function(node) {
+getClass("give-card").forEach(function(node) {
   node.addEventListener("click", function() {
     /* Instance variables */
     let overlayId = "overlay-give-card";
@@ -53,6 +53,20 @@
     }
   });
 });
+
+/*
+**  Newcard notice close button
+*/
+
+let newClose = document.getElementById('newcard-close');
+if (newClose) {
+  getBody().style.overflow = 'hidden';
+  newClose.addEventListener('click', function() {
+    getBody().style.overflow = null;
+    let wrapper = this.parentNode.parentNode;
+    wrapper.parentNode.removeChild(wrapper);
+  });
+}
 
 /*
 **  Append overlay
@@ -83,12 +97,10 @@ function addOverlay(overlayId, wrapper) {
   footer.className = 'flex-wrapper flex-right';
 
   /* Append btn */
-  let appendBtn = document.createElement('button');
+  let appendBtn = document.createElement('a');
   appendBtn.className = 'standard-btn card-btn';
   appendBtn.innerHTML = '⬋';
-  appendBtn.addEventListener('click', function() {
-    console.log("TODO");
-  });
+  appendBtn.href = "/giveto?cardid="
 
   /* Close btn */
   let closeBtn = document.createElement('button');
@@ -109,4 +121,20 @@ function addOverlay(overlayId, wrapper) {
   overlay.appendChild(main);
   overlay.appendChild(footer);
   wrapper.parentNode.parentNode.appendChild(overlay);
+}
+
+/*
+**  Get elements from class
+*/
+
+function getClass(className) {
+  return [].slice.call(document.getElementsByClassName(className));
+}
+
+/*
+**  Get page body
+*/
+
+function getBody() {
+  return document.getElementsByTagName('BODY')[0];
 }

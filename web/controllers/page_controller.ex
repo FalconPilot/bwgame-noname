@@ -24,19 +24,17 @@ defmodule Webccg.PageController do
   # Single user display
   def user(conn, %{"id" => user_id}) do
     case Integer.parse(user_id) do
-      {id, _} ->
+      {id, _point} ->
         case Repo.get_by(User, id: id) do
           nil ->
             conn
               |> put_flash(:error, "Utilisateur inconnu")
               |> redirect(to: "/users")
           user ->
-            if user == get_session(conn, :current_user) do
-              conn
-                |> assign(:user_set, %User{})
-            end
+            cards = CardHelpers.get_cards(user.cards)
             conn
               |> assign(:pageuser, user)
+              |> assign(:pagecards, cards)
               |> display("profile.html")
         end
       :error ->
@@ -48,8 +46,9 @@ defmodule Webccg.PageController do
 
   # Cardlist display
   def cardlist(conn, _params) do
+    query = from(c in Card, order_by: c.rarity)
     conn
-      |> assign(:cardlist, Repo.all(Card))
+      |> assign(:cardlist, Repo.all(query))
       |> assign_admin(:cardform, Card.changeset(%Card{}))
       |> display("cardlist.html")
   end
@@ -59,7 +58,6 @@ defmodule Webccg.PageController do
     case user = get_session(conn, :current_user) do
       nil ->
         conn
-
       user ->
         if user.privilege >= 3 do
           conn |> assign(key, value)

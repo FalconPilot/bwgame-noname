@@ -1,12 +1,16 @@
-<%= if Enum.count(@userlist) > 0 do %>
-  <%= for user <- @userlist do %>
-    <div class="flex-wrapper flex-1 panel-wrapper">
-      <%= img_tag(user.avatar) %>
-      <div class="userlist-body">
-        <%= link(user.username, to: "/users/#{user.id}") %>
+<div class="flex-wrapper flex-col flex-1 panel-wrapper flex-stretch">
+  <%= if Enum.count(@userlist) > 0 do %>
+    <%= for user <- @userlist do %>
+      <div class="userlist-wrapper flex-wrapper flex-stretch">
+        <div class="avatar-mini-wrapper">
+          <%= img_tag(user.avatar) %>
+        </div>
+        <div class="userlist-body flex-wrapper flex-stretch">
+          <%= link(user.username, to: "/users/#{user.id}", class: "flex-wrapper flex-col flex-left") %>
+        </div>
       </div>
-    </div>
+    <% end %>
+  <% else %>
+    <div>Aucun utilisateur</div>
   <% end %>
-<% else %>
-  <div>Aucun utilisateur</div>
-<% end %>
+</div>

@@ -9,10 +9,12 @@ defmodule Webccg.User do
     field :privilege, :integer
     field :encrypted_password, :string
     field :cards, {:array, :map}
+    field :last_obtained, :string
 
     # Virtual fields
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+    field :old_password, :string, virtual: true
 
     timestamps()
   end
@@ -33,6 +35,7 @@ defmodule Webccg.User do
       |> put_change(:avatar, "")
       |> put_change(:privilege, 1)
       |> put_change(:cards, [])
+      |> put_change(:last_obtained, "2000-01-01")
       |> hash_password
   end
 

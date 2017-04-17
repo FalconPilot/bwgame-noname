@@ -1,11 +1,51 @@
-<div class="flex-wrapper flex-col flex-top flex-1 panel-wrapper">
-  <h1 class="page-title"><%= @pageuser.username %></h1>
-  <div>
-    <%= img_tag(@pageuser.avatar) %>
-    <div class="flex-wrapper flex-col">
-      <%= if user = get_user(@conn) do %>
-        <p>Changer le mot de passe</p>
+<div class="flex-wrapper flex-col flex-top flex-1 flex-stretch  panel-wrapper">
+  <h1 class="page-title no-margin"><%= adapted_title("Profil", @pageuser.username) %></h1>
+  <div class="flex-wrapper flex-stretch">
+    <!-- Avatar -->
+    <div class="avatar-wrapper flex-wrapper flex-col">
+      <%= img_tag(@pageuser.avatar) %>
+    </div>
+    <!-- Informations utilisateur -->
+    <div class="flex-1 flex-wrapper flex-col flex-stretch">
+      <div class="flex-wrapper flex-col flex-1">
+      </div>
+      <%= if user = can_modify?(@conn, @pageuser.id) do %>
+        <%= form_tag("/users/update", class: "flex-wrapper flex-col flex-stretch", method: "post") %>
+          <!-- Hidden input -->
+          <%= hidden_input :user, :id, value: @pageuser.id %>
+          <!-- Modification d'avatar -->
+          <div class="flex-wrapper flex-col">
+            <label class="label-white">URL de l'avatar</label>
+            <%= text_input :user, :avatar, class: "standard-input large-width", placeholder: "Taille conseillée : 200x300" %>
+          </div>
+          <!-- Submit -->
+          <div class="flex-wrapper">
+            <%= submit("Modifier le profil", class: "standard-btn") %>
+          </div>
+        </form>
       <% end %>
     </div>
+  </div>
+  <h1 class="page-title no-margin-top">Liste de cartes</h1>
+  <!-- Bouton d'obtention de carte -->
+  <div class="flex-wrapper">
+    <%= if get_userid(@conn) == @pageuser.id do %>
+      <%= link("Obtenir une carte", to: "/obtain?userid=#{get_userid(@conn)}", class: "standard-btn") %>
+    <% end %>
+  </div>
+  <!-- Liste de cartes -->
+  <div class="flex-wrapper flex-wrap">
+    <%= for %{card: card, amount: amount} <- @pagecards do %>
+      <div class="card-wrapper">
+        <h2><%= card.name %></h2>
+        <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
+        <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
+        <p class="card-desc flex-1"><%= card.description %></p>
+        <p class="flex-wrapper">
+          <span class="flex-1">Carte #<%= card.id %></span>
+          <span class="card-amount">x<%= amount %></span>
+        </p>
+      </div>
+    <% end %>
   </div>
 </div>

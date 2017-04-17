@@ -30,12 +30,19 @@ defmodule Webccg.Web do
     quote do
       use Phoenix.Controller
 
-      alias Webccg.Repo
+      # Models
       alias Webccg.User
       alias Webccg.Card
+
+      # Libs
+      alias Webccg.Repo
+      alias Webccg.CardHelpers
+
+      # Ecto
       import Ecto
       import Ecto.Query
 
+      # Router/Gettext
       import Webccg.Router.Helpers
       import Webccg.Gettext
     end

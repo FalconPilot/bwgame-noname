@@ -38,6 +38,7 @@
         <%= link("Inscription", to: "/register", class: "standard-btn") %>
       <% end %>
       <!-- Common buttons -->
+      <%= link("Cartes", to: "/cards", class: "standard-btn") %>
       <%= link("Membres", to: "/users", class: "standard-btn") %>
       <%= link("Accueil", to: "/", class: "standard-btn") %>
     </header>
@@ -52,6 +53,24 @@
       <div class="flash-notice error">
         <%= error %>
       </div>
+    <% end %>
+    <!-- FLASH NEW CARDS -->
+    <%= if card = get_flash(@conn, :card) do %>
+    <div class="flex-wrapper flex-col card-notice">
+      <h1 class="page-title no-margin-top">Carte obtenue !</h1>
+      <div class="flex-1 flex-wrapper flex-col">
+        <button class="standard-btn" id="newcard-close">Fermer</button>
+        <div class="card-wrapper">
+          <h2><%= card.name %></h2>
+          <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
+          <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
+          <p class="card-desc flex-1"><%= card.description %></p>
+          <p class="flex-wrapper">
+            <span class="flex-1">Carte #<%= card.id %></span>
+          </p>
+        </div>
+      </div>
+    </div>
     <% end %>
     <!-- MAIN CONTENT -->
     <main class="flex-wrapper flex-col flex-1">
