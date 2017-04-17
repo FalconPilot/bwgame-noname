@@ -41,9 +41,9 @@ defmodule Webccg.CommonHelpers do
   def obtained_card?(user) do
     case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
       :gt ->
-        true
-      _ ->
         false
+      _ ->
+        true
     end
   end
 
