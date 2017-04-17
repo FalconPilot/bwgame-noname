@@ -30,7 +30,11 @@
   <!-- Bouton d'obtention de carte -->
   <div class="flex-wrapper">
     <%= if get_userid(@conn) == @pageuser.id do %>
-      <%= link("Obtenir une carte", to: "/obtain?userid=#{get_userid(@conn)}", class: "standard-btn") %>
+      <%= if obtained_card?(@pageuser) do %>
+        <%= link("Obtenir une carte", to: "/obtain?userid=#{get_userid(@conn)}", class: "standard-btn") %>
+      <% else %>
+        <button disabled="true" class="standard-btn" title="Vous avez déjà obtenu une carte aujourd'hui !">Obtenir une carte</button>
+      <% end %>
     <% end %>
   </div>
   <!-- Liste de cartes -->

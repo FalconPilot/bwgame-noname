@@ -40,7 +40,7 @@ defmodule Webccg.PageView do
 
   # Check if user has obtained a card today
   def obtained_card?(user) do
-    case Date.compare(Date.utc_today, Date.from_iso8601(user.last_obtained)) do
+    case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
       :gt ->
         true
       _ ->
