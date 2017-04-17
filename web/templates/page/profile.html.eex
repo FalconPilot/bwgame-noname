@@ -33,7 +33,7 @@
       <%= if obtained_card?(@pageuser) do %>
         <%= link("Obtenir une carte", to: "/obtain?userid=#{get_userid(@conn)}", class: "standard-btn") %>
       <% else %>
-        <button disabled="true" class="standard-btn" title="Vous avez déjà obtenu une carte aujourd'hui !">Obtenir une carte</button>
+        <button disabled="true" class="standard-btn important">Carte obtenue</button>
       <% end %>
     <% end %>
   </div>

@@ -18,8 +18,10 @@
       <h1 class="flex-wrapper flex-left">Elixir WebCCG</h1>
       <!-- Logged in buttons -->
       <%= if user = get_user(@conn) do %>
-        <%= if can_modify?(@conn, user.id) do %>
+        <%= if obtained_card?(user) do %>
           <%= link("Obtenir une carte", to: "/obtain?userid=#{user.id}", class: "standard-btn important") %>
+        <% else %>
+          <button disabled="true" class="standard-btn important">Carte obtenue</button>
         <% end %>
         <%= link("Profil", to: "/users/#{user.id}", class: "standard-btn") %>
         <%= link("Déconnexion", to: "/logout", class: "standard-btn") %>
