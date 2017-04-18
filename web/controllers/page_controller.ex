@@ -16,8 +16,9 @@ defmodule Webccg.PageController do
 
   # Userlist display
   def userlist(conn, _params) do
+    query = from(u in User, order_by: u.username)
     conn
-      |> assign(:userlist, Repo.all(User))
+      |> assign(:userlist, Repo.all(query))
       |> display("userlist.html")
   end
 
