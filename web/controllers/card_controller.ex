@@ -151,11 +151,11 @@ defmodule Webccg.CardController do
       end)
       conn
         |> put_flash(:info, "ID des cartes réordonnés")
-        |> redirect(to: "/")
+        |> redirect(to: "/cards")
     else
       conn
         |> put_flash(:error, "Vous devez être administrateur !")
-        |> redirect(to: "/")
+        |> redirect(to: "/cards")
     end
   end
 

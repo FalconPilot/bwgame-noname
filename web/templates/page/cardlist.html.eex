@@ -1,73 +1,80 @@
-<%= if Enum.count(@cardlist) > 0 or is_admin?(@conn) do %>
-  <div class="flex-wrapper flex-wrap flex-1">
+<div class="flex-wrapper flex-col flex-1">
+  <%= if Enum.count(@cardlist) > 0 or is_admin?(@conn) do %>
     <%= if is_admin?(@conn) do %>
-      <%= form_for @cardform, "/newcard", [class: "card-wrapper generator"], fn f -> %>
-        <!-- Display id -->
-        <%= hidden_input f, :display_id, value: Enum.count(@cardlist) + 1 %>
-        <!-- Name -->
-        <p class="flex-wrapper flex-col">
-          <label>Nom</label>
-          <%= text_input f, :name, class: "standard-input" %>
-        </p>
-        <!-- Image -->
-        <p class="flex-wrapper flex-col">
-          <label>URL de l'image</label>
-          <%= text_input f, :image, class: "standard-input" %>
-        </p>
-        <!-- Group -->
-        <p class="flex-wrapper flex-col">
-          <label>Groupe</label>
-          <%= text_input f, :group, class: "standard-input" %>
-        </p>
-        <!-- Rarity -->
-        <div class="flex-wrapper flex-around" style="width: 100%;">
+      <%= link("Réordonner les IDs", to: "/cards/reorder", class: "standard-btn") %>
+    <% end %>
+    <div class="flex-wrapper flex-wrap">
+      <%= if is_admin?(@conn) do %>
+        <%= form_for @cardform, "/newcard", [class: "card-wrapper generator"], fn f -> %>
+          <!-- Display id -->
+          <%= hidden_input f, :display_id, value: Enum.count(@cardlist) + 1 %>
+          <!-- Name -->
           <p class="flex-wrapper flex-col">
-            <span name="rarity">★</span>
-            <%= radio_button f, :rarity, 1, [checked: "checked"] %>
+            <label>Nom</label>
+            <%= text_input f, :name, class: "standard-input" %>
           </p>
+          <!-- Image -->
           <p class="flex-wrapper flex-col">
-            <span name="rarity">☆</span>
-            <%= radio_button f, :rarity, 2 %>
+            <label>URL de l'image</label>
+            <%= text_input f, :image, class: "standard-input" %>
           </p>
+          <!-- Group -->
           <p class="flex-wrapper flex-col">
-            <span name="rarity">☆</span>
-            <%= radio_button f, :rarity, 3 %>
+            <label>Groupe</label>
+            <%= text_input f, :group, class: "standard-input" %>
           </p>
-          <p class="flex-wrapper flex-col">
-            <span name="rarity">☆</span>
-            <%= radio_button f, :rarity, 4 %>
+          <!-- Rarity -->
+          <div class="flex-wrapper flex-around" style="width: 100%;">
+            <p class="flex-wrapper flex-col">
+              <span name="rarity">★</span>
+              <%= radio_button f, :rarity, 1, [checked: "checked"] %>
+            </p>
+            <p class="flex-wrapper flex-col">
+              <span name="rarity">☆</span>
+              <%= radio_button f, :rarity, 2 %>
+            </p>
+            <p class="flex-wrapper flex-col">
+              <span name="rarity">☆</span>
+              <%= radio_button f, :rarity, 3 %>
+            </p>
+            <p class="flex-wrapper flex-col">
+              <span name="rarity">☆</span>
+              <%= radio_button f, :rarity, 4 %>
+            </p>
+            <p class="flex-wrapper flex-col">
+              <span name="rarity">☆</span>
+              <%= radio_button f, :rarity, 5 %>
+            </p>
+          </div>
+          <!-- Description -->
+          <p class="flex-wrapper flex-col flex-1">
+            <label>Description</label>
+            <%= textarea f, :description, class: "standard-textarea flex-1" %>
           </p>
-          <p class="flex-wrapper flex-col">
-            <span name="rarity">☆</span>
-            <%= radio_button f, :rarity, 5 %>
+          <!-- Submit -->
+          <%= submit "Créer", class: "standard-btn" %>
+        <% end %>
+      <% end %>
+      <%= for card <- @cardlist do %>
+        <div class="card-wrapper rarity-<%= card.rarity %>">
+          <h2 class="bg-<%= String.downcase(card.group) %>">
+            <%= link(card.name, to: "/cards/#{card.display_id}") %>
+          </h2>
+          <h3 class="bg-<%= String.downcase(card.group) %>"><%= card.group %></h3>
+          <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
+          <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
+          <p class="card-desc flex-1"><%= card.description %></p>
+          <p class="flex-wrapper">
+            <span class="flex-1">Carte #<%= card.display_id %></span>
+            <%= if is_admin?(@conn) do %>
+              <a class="standard-btn card-btn give-card" href="#">⬋</a>
+              <%= link("x", to: "/delete_card?cid=#{card.id}", class: "standard-btn card-btn") %>
+            <% end %>
           </p>
         </div>
-        <!-- Description -->
-        <p class="flex-wrapper flex-col flex-1">
-          <label>Description</label>
-          <%= textarea f, :description, class: "standard-textarea flex-1" %>
-        </p>
-        <!-- Submit -->
-        <%= submit "Créer", class: "standard-btn" %>
       <% end %>
-    <% end %>
-    <%= for card <- @cardlist do %>
-      <div class="card-wrapper rarity-<%= card.rarity %>">
-        <h2 class="bg-<%= String.downcase(card.group) %>"><%= card.name %></h2>
-        <h3 class="bg-<%= String.downcase(card.group) %>"><%= card.group %></h3>
-        <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
-        <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
-        <p class="card-desc flex-1"><%= card.description %></p>
-        <p class="flex-wrapper">
-          <span class="flex-1">Carte #<%= card.display_id %></span>
-          <%= if is_admin?(@conn) do %>
-            <a class="standard-btn card-btn give-card" href="#">⬋</a>
-            <%= link("x", to: "/delete_card?cid=#{card.id}", class: "standard-btn card-btn") %>
-          <% end %>
-        </p>
-      </div>
-    <% end %>
-  </div>
-<% else %>
-  <div class="self-middle">Aucune carte</div>
-<% end %>
+    </div>
+  <% else %>
+    <div class="self-middle">Aucune carte</div>
+  <% end %>
+</div>

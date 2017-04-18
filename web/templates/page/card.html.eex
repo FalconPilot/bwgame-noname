@@ -1,0 +1,22 @@
+<div class="flex-wrapper flex-col flex-top flex-stretch flex-1 panel-wrapper">
+  <h1 class="page-title no-margin"><%= @pagecard.name %></h1>
+  <div class="flex-wrapper flex-1">
+    <!-- Card display -->
+    <div class="card-wrapper rarity-<%= @pagecard.rarity %>">
+      <h2 class="bg-<%= String.downcase(@pagecard.group) %>">
+        <%= link(@pagecard.name, to: "/cards/#{@pagecard.display_id}") %>
+      </h2>
+      <h3 class="bg-<%= String.downcase(@pagecard.group) %>"><%= @pagecard.group %></h3>
+      <div class="img-wrapper flex-wrapper"><%= img_tag(@pagecard.image) %></div>
+      <div class="card-rarity flex-wrapper"><%= @pagecard.rarity %></div>
+      <p class="card-desc flex-1"><%= @pagecard.description %></p>
+      <p class="flex-wrapper">
+        <span class="flex-1">Carte #<%= @pagecard.display_id %></span>
+        <%= if is_admin?(@conn) do %>
+          <a class="standard-btn card-btn give-card" href="#">⬋</a>
+          <%= link("x", to: "/delete_card?cid=#{@pagecard.id}", class: "standard-btn card-btn") %>
+        <% end %>
+      </p>
+    </div>
+  </div>
+</div>
