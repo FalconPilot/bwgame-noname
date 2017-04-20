@@ -18,10 +18,10 @@
       <h1 class="flex-wrapper flex-left">Elixir WebCCG</h1>
       <!-- Logged in buttons -->
       <%= if user = get_user(@conn) do %>
-        <%= if !obtained_card?(user) do %>
-          <%= link("Obtenir une carte", to: "/obtain?userid=#{user.id}", class: "standard-btn important") %>
-        <% else %>
+        <%= if obtained_card?(user) do %>
           <button disabled="true" class="standard-btn important">Carte obtenue</button>
+        <% else %>
+          <%= link("Obtenir une carte", to: "/obtain?userid=#{user.id}", class: "standard-btn important") %>
         <% end %>
         <%= link("Profil", to: "/users/#{user.id}", class: "standard-btn") %>
         <%= link("Déconnexion", to: "/logout", class: "standard-btn") %>
@@ -65,16 +65,7 @@
         <h1 class="page-title no-margin-top">Carte obtenue !</h1>
         <div class="flex-1 flex-wrapper flex-col">
           <button class="standard-btn" id="newcard-close">Fermer</button>
-          <div class="card-wrapper rarity-<%= card.rarity %>">
-            <h2 class="bg-<%= String.downcase(card.group) %>"><%= card.name %></h2>
-            <h3 class="bg-<%= String.downcase(card.group) %>"><%= card.group %></h3>
-            <div class="img-wrapper flex-wrapper"><%= img_tag(card.image) %></div>
-            <div class="card-rarity flex-wrapper"><%= card.rarity %></div>
-            <p class="card-desc flex-1"><%= card.description %></p>
-            <p class="flex-wrapper">
-              <span class="flex-1">Carte #<%= card.display_id %></span>
-            </p>
-          </div>
+          <%= render CommonView, "card_template.html", card: card, can_modify: false %>
         </div>
       </div>
     <% end %>

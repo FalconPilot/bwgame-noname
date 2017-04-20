@@ -168,8 +168,9 @@ defmodule Webccg.CardController do
     })
     # Update in Repo and redirect
     case Repo.update(user) do
-      {:ok, _} ->
+      {:ok, new} ->
         conn
+          |> put_session(:current_user, new)
           |> put_flash(:card, card)
           |> redirect(to: url)
       {:error, _} ->

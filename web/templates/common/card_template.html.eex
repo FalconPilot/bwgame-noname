@@ -1,0 +1,16 @@
+<div class="card-wrapper rarity-<%= @card.rarity %>">
+  <h2 class="bg-<%= String.downcase(@card.group) %>">
+    <%= link(@card.name, to: "/cards/#{@card.display_id}") %>
+  </h2>
+  <h3 class="bg-<%= String.downcase(@card.group) %>"><%= @card.group %></h3>
+  <div class="img-wrapper flex-wrapper"><%= img_tag(@card.image) %></div>
+  <div class="card-rarity flex-wrapper"><%= @card.rarity %></div>
+  <p class="card-desc flex-1"><%= @card.description %></p>
+  <p class="flex-wrapper">
+    <span class="flex-1">Carte #<%= @card.display_id %></span>
+    <%= if @can_modify do %>
+      <a class="standard-btn card-btn give-card" href="#">⬋</a>
+      <%= link("x", to: "/delete_card?cid=#{@card.id}", class: "standard-btn card-btn") %>
+    <% end %>
+  </p>
+</div>

@@ -39,6 +39,7 @@ defmodule Webccg.CommonHelpers do
 
   # Check if user has obtained a card today
   def obtained_card?(user) do
+    IO.inspect user.last_obtained
     case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
       :gt ->
         false

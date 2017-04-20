@@ -62,14 +62,16 @@ defmodule Webccg.UserController do
   # Empty param list
   defp apply_params(conn, [], user, url) do
     case Repo.update(user) do
-      {:ok, _} ->
+      {:ok, new} ->
         conn
+          |> put_session(:current_user, new)
           |> put_flash(:info, "Profil mis à jour")
           |> redirect(to: url)
       {:error, _} ->
         conn
           |> put_flash(:error, "Erreur de mise à jour")
           |> redirect(to: url)
+    end
   end
-end
+
 end
