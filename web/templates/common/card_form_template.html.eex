@@ -1,0 +1,49 @@
+<%= form_for @cardform, "/newcard", [class: "card-wrapper generator", multipart: true], fn f -> %>
+  <!-- Display id -->
+  <%= hidden_input f, :display_id, value: @display_id %>
+  <!-- Name -->
+  <p class="flex-wrapper flex-col">
+    <label>Nom</label>
+    <%= text_input f, :name, class: "standard-input" %>
+  </p>
+  <!-- Image -->
+  <p class="flex-wrapper flex-col">
+    <label>Image</label>
+    <%= file_input f, :image %>
+  </p>
+  <!-- Group -->
+  <p class="flex-wrapper flex-col">
+    <label>Groupe</label>
+    <%= text_input f, :group, class: "standard-input" %>
+  </p>
+  <!-- Rarity -->
+  <div class="flex-wrapper flex-around" style="width: 100%;">
+    <p class="flex-wrapper flex-col">
+      <span name="rarity">★</span>
+      <%= radio_button f, :rarity, 1, [checked: "checked"] %>
+    </p>
+    <p class="flex-wrapper flex-col">
+      <span name="rarity">☆</span>
+      <%= radio_button f, :rarity, 2 %>
+    </p>
+    <p class="flex-wrapper flex-col">
+      <span name="rarity">☆</span>
+      <%= radio_button f, :rarity, 3 %>
+    </p>
+    <p class="flex-wrapper flex-col">
+      <span name="rarity">☆</span>
+      <%= radio_button f, :rarity, 4 %>
+    </p>
+    <p class="flex-wrapper flex-col">
+      <span name="rarity">☆</span>
+      <%= radio_button f, :rarity, 5 %>
+    </p>
+  </div>
+  <!-- Description -->
+  <p class="flex-wrapper flex-col flex-1">
+    <label>Description</label>
+    <%= textarea f, :description, class: "standard-textarea flex-1" %>
+  </p>
+  <!-- Submit -->
+  <%= submit "Créer", class: "standard-btn" %>
+<% end %>

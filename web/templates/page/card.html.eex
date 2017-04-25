@@ -2,6 +2,6 @@
   <h1 class="page-title no-margin"><%= @pagecard.name %></h1>
   <div class="flex-wrapper flex-1">
     <!-- Card display -->
-    <%= render CommonView, "card_template.html", card: @pagecard, can_modify: is_admin?(@conn) %>
+    <%= render CommonView, "card_template.html", card: @pagecard, url: static_path(@conn, @pagecard.image), can_modify: is_admin?(@conn) %>
   </div>
 </div>

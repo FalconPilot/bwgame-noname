@@ -111,7 +111,8 @@ footer > img {
 .flex-wrapper.panel-wrapper > div,
 .flex-wrapper.panel-wrapper > p,
 .flex-wrapper.panel-wrapper > h1,
-.flex-wrapper.panel-wrapper > h2 {
+.flex-wrapper.panel-wrapper > h2,
+.noshrink {
   flex-shrink: 0;
 }
 
@@ -355,6 +356,10 @@ footer > img {
   background-color: #333;
   border-radius: 5px;
   border: 8px solid #111;
+}
+
+.card-wrapper input[type=file] {
+  color: #FFF;
 }
 
 .card-wrapper:not(.generator) > h2 {

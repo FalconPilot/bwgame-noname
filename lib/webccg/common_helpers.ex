@@ -39,7 +39,6 @@ defmodule Webccg.CommonHelpers do
 
   # Check if user has obtained a card today
   def obtained_card?(user) do
-    IO.inspect user.last_obtained
     case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
       :gt ->
         false
@@ -75,6 +74,18 @@ defmodule Webccg.CommonHelpers do
     char == "O" or
     char == "U" or
     char == "Y"
+  end
+
+  # Check if url is static
+  def is_static?(str) do
+    String.first(str) == "/"
+  end
+
+  # Get static url
+  def get_static(url) do
+    String.split(url, "/")
+      |> List.delete_at(1)
+      |> Enum.join("/")
   end
 
 end
