@@ -1,4 +1,4 @@
-<%= form_for @cardform, "/newcard", [class: "card-wrapper generator", multipart: true], fn f -> %>
+<%= form_for @cardform, "/newcard", [class: "card-wrapper generator"], fn f -> %>
   <!-- Display id -->
   <%= hidden_input f, :display_id, value: @display_id %>
   <!-- Name -->
@@ -8,8 +8,8 @@
   </p>
   <!-- Image -->
   <p class="flex-wrapper flex-col">
-    <label>Image</label>
-    <%= file_input f, :image %>
+    <label>URL de l'image</label>
+    <%= text_input f, :image, class: "standard-input" %>
   </p>
   <!-- Group -->
   <p class="flex-wrapper flex-col">

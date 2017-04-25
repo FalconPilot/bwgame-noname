@@ -76,16 +76,4 @@ defmodule Webccg.CommonHelpers do
     char == "Y"
   end
 
-  # Check if url is static
-  def is_static?(str) do
-    String.first(str) == "/"
-  end
-
-  # Get static url
-  def get_static(url) do
-    String.split(url, "/")
-      |> List.delete_at(1)
-      |> Enum.join("/")
-  end
-
 end

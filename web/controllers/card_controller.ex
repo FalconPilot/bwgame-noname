@@ -4,62 +4,35 @@ defmodule Webccg.CardController do
   # Create new card
   def new(conn, %{"card" => card_params}) do
     if is_admin?(conn) do
-      case Map.get(card_params, "image") do
-        # Valid image struct
-        %Plug.Upload{filename: name, path: file} ->
-          # Modify params
-          path = "/images/cards/#{name}"
-          params = Map.update(card_params, "image", path, fn(_x) ->
-            path
-          end)
-
-          # Define changeset
-          changeset =
-            case Repo.get_by(Card, name: params["name"]) do
-              nil ->
-                Card.changeset(%Card{}, params)
-              card ->
-                # Format params and update changeset
-                params = Enum.map(card_params, fn({k, v}) ->
-                  value =
-                    case Integer.parse(v) do
-                      {int, _point} ->
-                        int
-                      _ ->
-                        v
-                    end
-                  {String.to_atom(k), value}
-                end)
-                # Define if old image must be removed
-                new = Ecto.Changeset.change(card, params)
-                if new.valid? and params["image"] != card.image do
-                  File.rm(card.image)
+      # Define changeset
+      changeset =
+        case Repo.get_by(Card, name: card_params["name"]) do
+          nil ->
+            Card.changeset(%Card{}, card_params)
+          card ->
+            # Format params and update changeset
+            params = Enum.map(card_params, fn({k, v}) ->
+              value =
+                case Integer.parse(v) do
+                  {int, _point} ->
+                    int
+                  _ ->
+                    v
                 end
-                new
-            end
-
-          # Define if file can be copied
-          if changeset.valid? do
-            File.cp(file, "/web/static/assets/images#{path}")
-          end
-
-          # Insert or update card
-          case Repo.insert_or_update(changeset) do
-            {:ok, new_card} ->
-              conn
-                |> put_flash(:info, "Carte \"#{new_card.name}\" créée avec succès !")
-                |> redirect(to: "/cards")
-
-            {:error, _} ->
-              conn
-                |> put_flash(:error, "Carte invalide !")
-                |> redirect(to: "/cards")
-          end
-
-        # Invalid image struct
-        _ ->
+              {String.to_atom(k), value}
+            end)
+            Ecto.Changeset.change(card, params)
+        end
+      # Insert or update card
+      case Repo.insert_or_update(changeset) do
+        {:ok, new_card} ->
           conn
-            |> put_flash(:error, "Image invalide !")
+            |> put_flash(:info, "Carte \"#{new_card.name}\" créée avec succès !")
+            |> redirect(to: "/cards")
+
+        {:error, _} ->
+          conn
+            |> put_flash(:error, "Carte invalide !")
             |> redirect(to: "/cards")
       end
     else
