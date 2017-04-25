@@ -358,10 +358,6 @@ footer > img {
   border: 8px solid #111;
 }
 
-.card-wrapper input[type=file] {
-  color: #FFF;
-}
-
 .card-wrapper:not(.generator) > h2 {
   position: relative;
   width: 100%;
