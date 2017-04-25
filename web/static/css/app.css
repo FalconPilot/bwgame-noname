@@ -33,7 +33,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-family: sans-serif;
+  font-family: 'Open sans';
 }
 
 header, main, footer {
@@ -439,7 +439,7 @@ footer > img {
   font-style: italic;
   color: #FFF;
   font-size: 0.6em;
-  text-align: justify;
+  text-align: center;
   overflow: auto;
 }
 
