@@ -4,7 +4,7 @@
   </h2>
   <h3 class="bg-<%= String.downcase(@card.group) %>"><%= @card.group %></h3>
   <div class="img-wrapper flex-wrapper">
-    <%= img_tag(@url) %>
+    <%= img_tag(@card.image) %>
   </div>
   <div class="card-rarity flex-wrapper"><%= @card.rarity %></div>
   <p class="card-desc flex-1"><%= @card.description %></p>

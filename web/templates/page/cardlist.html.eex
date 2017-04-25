@@ -8,7 +8,7 @@
         <%= render CommonView, "card_form_template.html", cardform: @cardform, display_id: Enum.count(@cardlist) + 1 %>
       <% end %>
       <%= for card <- @cardlist do %>
-        <%= render CommonView, "card_template.html", card: card, url: static_path(@conn, card.image), can_modify: is_admin?(@conn) %>
+        <%= render CommonView, "card_template.html", card: card, can_modify: is_admin?(@conn) %>
       <% end %>
     </div>
   <% else %>
