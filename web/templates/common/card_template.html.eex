@@ -11,11 +11,13 @@
   <p class="flex-wrapper">
     <span class="flex-1">Carte #<%= @card.display_id %></span>
     <%= if @can_modify do %>
-      <a class="standard-btn card-btn give-card" href="#">⬋</a>
-      <%= link("x", to: "/delete_card?cid=#{@card.id}", class: "standard-btn card-btn") %>
+      <%= link(img_tag("/images/gui/edit-btn.png"), to: "#", class: "img-btn edit-card") %>
+      <%= link(img_tag("/images/gui/give-btn.png"), to: "#", class: "img-btn give-card") %>
+      <%= link(img_tag("/images/gui/delete-btn.png"), to: "/delete_card?cid=#{@card.id}", class: "img-btn") %>
     <% end %>
     <%= if assigns[:amount] do %>
       <span class="card-amount">x<%= @amount %></span>
     <% end %>
   </p>
+  <input type="hidden" name="cid" value="<%= @card.id %>"/>
 </div>

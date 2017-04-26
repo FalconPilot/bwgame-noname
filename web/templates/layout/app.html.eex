@@ -17,18 +17,14 @@
     <!-- HEADER -->
     <header class="flex-wrapper">
       <h1 class="flex-wrapper flex-left">Elixir WebCCG</h1>
-      <!-- Logged in buttons -->
+      <!-- Obtain card -->
       <%= if user = get_user(@conn) do %>
-        <%= if obtained_card?(user) do %>
-          <button disabled="true" class="standard-btn important">Carte obtenue</button>
-        <% else %>
+        <%= if !obtained_card?(user) do %>
           <%= link("Obtenir une carte", to: "/obtain?userid=#{user.id}", class: "standard-btn important") %>
         <% end %>
-        <%= link("Profil", to: "/users/#{user.id}", class: "standard-btn") %>
-        <%= link("Déconnexion", to: "/logout", class: "standard-btn") %>
-      <!-- Logged out buttons -->
-      <% else %>
-        <!-- Login form -->
+      <% end %>
+      <!-- Login form -->
+      <%= if !logged_in?(@conn) do %>
         <%= form_for @loginset, "/login?redirect=#{@conn.request_path}", [class: "flex-wrapper"], fn f -> %>
           <div class="flex-wrapper flex-col">
             <label>Pseudo</label>
@@ -40,13 +36,20 @@
           </div>
           <%= submit "➤", class: "standard-btn hidden", title: "Connexion" %>
         <% end %>
-        <!-- Register -->
-        <%= link("Inscription", to: "/register", class: "standard-btn") %>
       <% end %>
       <!-- Common buttons -->
-      <%= link("Cartes", to: "/cards", class: "standard-btn") %>
-      <%= link("Membres", to: "/users", class: "standard-btn") %>
-      <%= link("Accueil", to: "/", class: "standard-btn") %>
+      <%= link(img_tag("/images/gui/cards-btn.png"), to: "/cards", class: "img-btn", title: "Cartes") %>
+      <%= link(img_tag("/images/gui/userlist-btn.png"), to: "/users", class: "img-btn", title: "Utilisateurs") %>
+      <%= link(img_tag("/images/gui/home-btn.png"), to: "/", class: "img-btn", title: "Accueil") %>
+      <!-- Logged in buttons -->
+      <%= if user = get_user(@conn) do %>
+        <%= link(img_tag("/images/gui/user-btn.png"), to: "/users/#{user.id}", class: "img-btn", title: "Profil") %>
+        <%= link(img_tag("/images/gui/delete-btn.png"), to: "/logout", class: "img-btn", title: "Déconnexion") %>
+      <!-- Logged out buttons -->
+      <% else %>
+        <!-- Register -->
+        <%= link(img_tag("/images/gui/edit-btn.png"), to: "/register", class: "img-btn", title: "Inscription") %>
+      <% end %>
     </header>
     <%= if info = get_flash(@conn, :info) do %>
       <!-- FLASH INFOS -->
@@ -79,7 +82,8 @@
     <!-- FOOTER -->
     <footer class="flex-wrapper flex-right">
       Powered by
-      <img src="<%= static_path(@conn, "/images/phoenix.png") %>"/>
+      <img src="<%= static_path(@conn, "/images/gui/phoenix.png") %>"/>
+      &nbsp;<%= link("Icon8", to: "https://icons8.com/", target: "_blank") %>
     </footer>
     <!-- SCRIPTS -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

@@ -37,7 +37,7 @@ defmodule Webccg.CommonHelpers do
     Plug.Conn.get_session(conn, :current_user)
   end
 
-  # Check if user has obtained a card today
+  # Check if user has obtained card
   def obtained_card?(user) do
     case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
       :gt ->

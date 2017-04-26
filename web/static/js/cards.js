@@ -3,20 +3,22 @@
 */
 
 getName("rarity").forEach(function(node) {
-  node
-    .parentNode
-    .getElementsByTagName('INPUT')[0]
-    .addEventListener("click", function() {
-      let rarity = parseInt(this.parentNode.getElementsByTagName('INPUT')[0].value);
-      [].slice.call(document.getElementsByName('rarity')).forEach(function(star, i) {
-        if (i < rarity) {
-          star.innerHTML = "★";
-        } else {
-          star.innerHTML = "☆";
-        }
-      });
+  getTag("INPUT", node.parentNode)[0]
+    .addEventListener("change", function() {
+      let rarity = parseInt(getTag("INPUT", this.parentNode)[0].value);
+      changeRarity(rarity);
     });
 });
+
+function changeRarity(rarity) {
+  getName('rarity').forEach(function(star, i) {
+    if (i < rarity) {
+      star.innerHTML = "★";
+    } else {
+      star.innerHTML = "☆";
+    }
+  });
+}
 
 /*
 **  Card rarity display
@@ -55,6 +57,32 @@ getClass("give-card").forEach(function(node) {
 });
 
 /*
+**  Card editing button
+*/
+
+getClass("edit-card").forEach(function(node) {
+  node.addEventListener("click", function() {
+    /* Instance variables */
+    let form = getId("card-form");
+    let wrapper = this.parentNode.parentNode;
+
+    /* Define card values */
+    let rarity = getClass("card-rarity", wrapper)[0].childNodes.length;
+    let imgwrapper = getClass("img-wrapper", wrapper)[0];
+
+    /* Modify form */
+    getId("card_name").value = getTag("H2", wrapper)[0].textContent.trim();
+    getId("card_group").value = getTag("H3", wrapper)[0].textContent.trim();
+    getId("card_image").value = getStaticPath(getTag("IMG", imgwrapper)[0].src, "/images").trim();
+    getId("card_description").value = getClass("card-desc", wrapper)[0].textContent.trim();
+    getId("card_rarity_" + rarity).checked = true;
+
+    /* Edit rarity display */
+    changeRarity(rarity);
+  });
+});
+
+/*
 **  Newcard notice close button
 */
 
@@ -72,12 +100,16 @@ if (newClose) {
 **  Append overlay
 */
 
-function addOverlay(overlayId, wrapper) {
+function addOverlay(overlayId, item) {
+  /* Instance variables */
+  let wrapper = item.parentNode.parentNode;
+  let cid = getTag('input', wrapper)[0].value;
+
   /* Global overlay */
   let overlay = document.createElement('div');
   overlay.id = overlayId;
   overlay.className = 'flex-wrapper flex-col flex-stretch';
-  overlay.name = wrapper.name;
+  overlay.name = item.name;
 
   /* Wrapping div */
   let main = document.createElement('div');
@@ -91,21 +123,27 @@ function addOverlay(overlayId, wrapper) {
   /* User input */
   let userInput = document.createElement('input');
   userInput.className = 'standard-input';
+  userInput.addEventListener("input", function() {
+    let btn = getId('append-btn');
+    btn.href = "/giveto?cardid=" + btn.value + "&username=" + this.value;
+  });
 
-  /* Buttons footer */
-  let footer = document.createElement('div');
-  footer.className = 'flex-wrapper flex-right';
+  /* Buttons header */
+  let header = document.createElement('div');
+  header.className = 'flex-wrapper flex-left';
 
   /* Append btn */
   let appendBtn = document.createElement('a');
-  appendBtn.className = 'standard-btn card-btn';
-  appendBtn.innerHTML = '⬋';
-  appendBtn.href = "/giveto?cardid="
+  appendBtn.className = 'img-btn';
+  appendBtn.id = "append-btn";
+  appendBtn.innerHTML = "<img src='/images/gui/give-btn.png'>";
+  appendBtn.value = cid;
+  appendBtn.href = "/giveto?cardid=" + cid + "&username=";
 
   /* Close btn */
   let closeBtn = document.createElement('button');
-  closeBtn.className = 'standard-btn card-btn';
-  closeBtn.innerHTML = "x";
+  closeBtn.className = 'img-btn';
+  closeBtn.innerHTML = "<img src='/images/gui/delete-btn.png'>";
   closeBtn.addEventListener('click', function() {
     let overlay = document.getElementById(overlayId);
     overlay.parentNode.removeChild(overlay);
@@ -115,24 +153,40 @@ function addOverlay(overlayId, wrapper) {
   main.appendChild(userLabel);
   main.appendChild(userInput);
 
-  footer.appendChild(appendBtn);
-  footer.appendChild(closeBtn);
+  header.appendChild(appendBtn);
+  header.appendChild(closeBtn);
 
+  overlay.appendChild(header);
   overlay.appendChild(main);
-  overlay.appendChild(footer);
-  wrapper.parentNode.parentNode.appendChild(overlay);
+  wrapper.appendChild(overlay);
+}
+
+/*
+**  Get static path of an item
+*/
+
+function getStaticPath(url, first) {
+  return (first + url.split(first)[1]);
 }
 
 /*
 **  Get elements from selector
 */
 
-function getClass(className) {
-  return [].slice.call(document.getElementsByClassName(className));
+function getClass(className, wrapper = document) {
+  return [].slice.call(wrapper.getElementsByClassName(className));
 }
 
-function getName(name) {
-  return [].slice.call(document.getElementsByName(name));
+function getName(name, wrapper = document) {
+  return [].slice.call(wrapper.getElementsByName(name));
+}
+
+function getTag(tagName, wrapper = document) {
+  return [].slice.call(wrapper.getElementsByTagName(tagName));
+}
+
+function getId(id, wrapper = document) {
+  return wrapper.getElementById(id);
 }
 
 /*

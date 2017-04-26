@@ -4,6 +4,7 @@ defmodule Webccg.CardController do
   # Create new card
   def new(conn, %{"card" => card_params}) do
     if is_admin?(conn) do
+      IO.inspect card_params["name"]
       # Define changeset
       changeset =
         case Repo.get_by(Card, name: card_params["name"]) do
