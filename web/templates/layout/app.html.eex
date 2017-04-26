@@ -82,8 +82,8 @@
     <!-- FOOTER -->
     <footer class="flex-wrapper flex-right">
       Powered by
-      <img src="<%= static_path(@conn, "/images/gui/phoenix.png") %>"/>
-      &nbsp;<%= link("Icon8", to: "https://icons8.com/", target: "_blank") %>
+      <%= link(img_tag("/images/gui/phoenix.png"), to: "http://www.phoenixframework.org/", target: "_blank") %>
+      <%= link(img_tag("/images/gui/icons8.png"), to: "https://icons8.com/", target: "_blank") %>
     </footer>
     <!-- SCRIPTS -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

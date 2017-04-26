@@ -93,9 +93,9 @@ footer {
   z-index: 50;
 }
 
-footer > img {
+footer > a > img {
   margin-left: 0.5em;
-  max-height: 1.2em;
+  max-height: 1.5em;
 }
 
 /*
