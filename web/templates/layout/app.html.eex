@@ -23,8 +23,9 @@
           <%= link("Obtenir une carte", to: "/obtain?userid=#{user.id}", class: "standard-btn important") %>
         <% end %>
       <% end %>
-      <!-- Login form -->
+      <!-- Logged out buttons -->
       <%= if !logged_in?(@conn) do %>
+        <!-- Login form -->
         <%= form_for @loginset, "/login?redirect=#{@conn.request_path}", [class: "flex-wrapper"], fn f -> %>
           <div class="flex-wrapper flex-col">
             <label>Pseudo</label>
@@ -35,6 +36,8 @@
             <%= password_input f, :password, class: "standard-input" %>
           </div>
           <%= submit "➤", class: "standard-btn hidden", title: "Connexion" %>
+          <!-- Register -->
+          <%= link(img_tag("/images/gui/edit-btn.png"), to: "/register", class: "img-btn", title: "Inscription") %>
         <% end %>
       <% end %>
       <!-- Common buttons -->
@@ -45,10 +48,6 @@
       <%= if user = get_user(@conn) do %>
         <%= link(img_tag("/images/gui/user-btn.png"), to: "/users/#{user.id}", class: "img-btn", title: "Profil") %>
         <%= link(img_tag("/images/gui/delete-btn.png"), to: "/logout", class: "img-btn", title: "Déconnexion") %>
-      <!-- Logged out buttons -->
-      <% else %>
-        <!-- Register -->
-        <%= link(img_tag("/images/gui/edit-btn.png"), to: "/register", class: "img-btn", title: "Inscription") %>
       <% end %>
     </header>
     <%= if info = get_flash(@conn, :info) do %>
