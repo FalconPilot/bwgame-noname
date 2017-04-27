@@ -7,17 +7,22 @@ defmodule Webccg.CommonHelpers do
 
   # Is user admin ?
   def is_admin?(conn) do
-    if logged_in?(conn) do
-      get_user(conn).privilege >= 3
+    if user = get_user(conn) do
+      user.privilege >= 3
     else
       false
     end
   end
 
+  # Is user admin or defined user ?
+  def admin_or_user?(conn, user) do
+    is_admin?(conn) or get_user(conn) == user
+  end
+
   # Get current username
   def get_username(conn) do
-    if logged_in?(conn) do
-      get_user(conn).username
+    if user = get_user(conn) do
+      user.username
     else
       nil
     end
@@ -25,8 +30,8 @@ defmodule Webccg.CommonHelpers do
 
   # Get current userid
   def get_userid(conn) do
-    if logged_in?(conn) do
-      get_user(conn).id
+    if user = get_user(conn) do
+      user.id
     else
       nil
     end
@@ -37,7 +42,7 @@ defmodule Webccg.CommonHelpers do
     Plug.Conn.get_session(conn, :current_user)
   end
 
-  # Check if user has obtained card
+  # Check if user has obtained card today
   def obtained_card?(user) do
     case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
       :gt ->

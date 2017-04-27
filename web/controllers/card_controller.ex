@@ -37,32 +37,34 @@ defmodule Webccg.CardController do
             |> redirect(to: "/cards")
       end
     else
-      conn
-        |> put_flash(:error, "Vous devez être administrateur !")
-        |> redirect(to: "/cards")
+      Webccg.PageController.redirect_admin(conn, "/cards")
     end
   end
 
   # Delete card
   def delete(conn, %{"cid" => card_id}) do
-    case Repo.get(Card, card_id) do
-      nil ->
-        conn
-          |> put_flash(:error, "La carte n'existe pas")
-          |> redirect(to: "/cards")
+    if is_admin?(conn) do
+      case Repo.get(Card, card_id) do
+        nil ->
+          conn
+            |> put_flash(:error, "La carte n'existe pas")
+            |> redirect(to: "/cards")
 
-      card ->
-        case Repo.delete card do
-          {:ok, _} ->
-            conn
-              |> put_flash(:info, "Carte supprimée avec succès")
-              |> redirect(to: "/cards")
+        card ->
+          case Repo.delete card do
+            {:ok, _} ->
+              conn
+                |> put_flash(:info, "Carte supprimée avec succès")
+                |> redirect(to: "/cards")
 
-          {:error, _} ->
-            conn
-              |> put_flash(:error, "La carte n'a pas pu être supprimée")
-              |> redirect(to: "/cards")
-        end
+            {:error, _} ->
+              conn
+                |> put_flash(:error, "La carte n'a pas pu être supprimée")
+                |> redirect(to: "/cards")
+          end
+      end
+    else
+      Webccg.PageController.redirect_admin(conn, "/cards")
     end
   end
 
@@ -154,9 +156,7 @@ defmodule Webccg.CardController do
         |> put_flash(:info, "ID des cartes réordonnés")
         |> redirect(to: "/cards")
     else
-      conn
-        |> put_flash(:error, "Vous devez être administrateur !")
-        |> redirect(to: "/cards")
+      Webccg.PageController.redirect_admin(conn, "/cards")
     end
   end
 

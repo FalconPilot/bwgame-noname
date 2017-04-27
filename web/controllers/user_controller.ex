@@ -40,12 +40,12 @@ defmodule Webccg.UserController do
     apply_params(conn, t, user, url)
   end
 
-  # ID update
+  # Prevent ID update
   defp apply_params(conn, [{"id", _v}|t], user, url) do
     apply_params(conn, t, user, url)
   end
 
-  # Update params
+  # Default param update
   defp apply_params(conn, [{k, v}|t], user, url) do
     atom = String.to_atom(k)
     value =

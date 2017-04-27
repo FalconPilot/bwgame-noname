@@ -88,4 +88,11 @@ defmodule Webccg.PageController do
         end
     end
   end
+
+  # Admin redirection
+  def redirect_admin(conn, url) do
+    conn
+      |> put_flash(:error, "Vous devez être administrateur")
+      |> redirect(to: url)
+  end
 end
