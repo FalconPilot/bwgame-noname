@@ -66,13 +66,46 @@ header, footer {
 }
 
 header > h1 {
-  margin: 8px 0;
+  margin: 8px 5px;
   flex: 1;
   text-shadow:
     1px 1px #FFF,
     1px -1px #FFF,
     -1px 1px #FFF,
     -1px -1px #FFF;
+}
+
+header > h1 > a {
+  position: relative;
+  display: block;
+  color: #111;
+  padding: 0 5px;
+}
+
+header > h1 > a:hover {
+  padding: 0 15px;
+}
+
+header > h1 > a:before,
+header > h1 > a:after {
+  content: " ";
+  position: absolute;
+  width: 0.4em;
+  height: 0.2em;
+}
+
+header > h1 > a:before {
+  top: 0;
+  left: 0;
+  border-top: 1px solid #FFF;
+  border-left: 1px solid #FFF;
+}
+
+header > h1 > a:after {
+  bottom: 0;
+  right: 0;
+  border-right: 1px solid #FFF;
+  border-bottom: 1px solid #FFF;
 }
 
 /*

@@ -16,7 +16,9 @@
   <body>
     <!-- HEADER -->
     <header class="flex-wrapper">
-      <h1 class="flex-wrapper flex-left">Elixir WebCCG</h1>
+      <h1 class="flex-wrapper flex-left">
+        <%= link("Elixir WebCCG", to: "/", title: "Accueil") %>
+      </h1>
       <!-- Obtain card -->
       <%= if user = get_user(@conn) do %>
         <%= if !obtained_card?(user) do %>
