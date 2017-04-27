@@ -94,7 +94,7 @@ defmodule Webccg.PageController do
     case get_session(conn, :current_user) do
       nil ->
         conn |> assign(key, value)
-      user ->
+      _user ->
         conn
     end
   end
