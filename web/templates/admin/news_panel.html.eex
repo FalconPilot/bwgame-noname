@@ -14,6 +14,6 @@
     <label>Contenu</label>
     <%= textarea f, :contents, class: "standard-textarea total-width least-height" %>
   </div>
-  <%= submit("Créer la news") %>
+  <%= submit("Créer la news", class: "standard-btn") %>
   <% end %>
 </div>
