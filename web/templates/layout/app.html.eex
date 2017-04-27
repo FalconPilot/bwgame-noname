@@ -23,6 +23,10 @@
           <%= link("Obtenir une carte", to: "/obtain?userid=#{user.id}", class: "standard-btn important") %>
         <% end %>
       <% end %>
+      <!-- Admin buttons -->
+      <%= if is_admin?(@conn) do %>
+        <%= link(img_tag("/images/gui/admin-btn.png"), to: "/admin?page=admin_panel", class: "img-btn") %>
+      <% end %>
       <!-- Logged out buttons -->
       <%= if !logged_in?(@conn) do %>
         <!-- Login form -->
@@ -83,6 +87,7 @@
       Powered by
       <%= link(img_tag("/images/gui/phoenix.png"), to: "http://www.phoenixframework.org/", target: "_blank") %>
       <%= link(img_tag("/images/gui/icons8.png"), to: "https://icons8.com/", target: "_blank") %>
+      <%= link(img_tag("/images/gui/6thstation.png"), to: "https://www.the6station.com/", target: "_blank") %>
     </footer>
     <!-- SCRIPTS -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

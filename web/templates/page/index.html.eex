@@ -1,7 +1,8 @@
-<div class="flex-wrapper flex-col flex-top flex-1">
-  <%= if user = get_user(@conn) do %>
-    <h1>Bienvenue <%= user.username %> !</h1>
-  <% else %>
-    <h1>Bienvenue !</h1>
-  <% end %>
+<div class="flex-wrapper flex-col flex-top flex-1 panel-wrapper">
+  <h1 class="page-title no-margin-top">News</h1>
+  <div class="flex-wrapper flex-col total-width">
+    <%= for news <- Webccg.Repo.all(News) do %>
+      <%= render CommonView, "news_template.html", news: news, can_delete: false %>
+    <% end %>
+  </div>
 </div>

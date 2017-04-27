@@ -1,0 +1,6 @@
+<div class="flex-wrapper flex-col flex-top flex-1 flex-stretch panel-wrapper">
+  <h1 class="page-title no-margin-top">Panneau d'administration</h1>
+  <div class="flex-wrapper flex-col">
+    <%= link("Gestion des news", to: "/admin?page=news_panel", class: "standard-btn") %>
+  </div>
+</div>

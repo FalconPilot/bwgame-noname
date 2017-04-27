@@ -33,6 +33,7 @@ defmodule Webccg.Web do
       # Models
       alias Webccg.User
       alias Webccg.Card
+      alias Webccg.News
 
       # Libs
       alias Webccg.Repo
@@ -58,6 +59,11 @@ defmodule Webccg.Web do
 
       # Aliases
       alias Webccg.CommonView
+
+      # Alias models
+      alias Webccg.User
+      alias Webccg.Card
+      alias Webccg.News
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML

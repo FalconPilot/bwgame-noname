@@ -37,6 +37,11 @@ defmodule Webccg.Router do
     post "/login", SessionController, :create
     get "/logout", SessionController, :logout
 
+    # Admin pages only
+    get "/admin", AdminController, :show
+    post "/create_news", AdminController, :create_news
+    get "/delete_news", AdminController, :delete_news
+
   end
 
   # Other scopes may use custom stacks.

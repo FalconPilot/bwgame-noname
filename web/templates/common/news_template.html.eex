@@ -1,0 +1,9 @@
+<div class="news-wrapper flex-wrapper flex-col flex-stretch medium-width">
+  <h2 class="sub-title no-margin"><%= @news.title %></h2>
+  <p><%= @news.contents %></p>
+  <%= if @can_delete do %>
+  <div class="flex-wrapper flex-right">
+    <%= link(img_tag("/images/gui/delete-btn.png"), to: "/delete_news?id=#{@news.id}", class: "img-btn") %>
+  </div>
+  <% end %>
+</div>

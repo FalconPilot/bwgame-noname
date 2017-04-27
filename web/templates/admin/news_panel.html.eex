@@ -1,0 +1,19 @@
+<div class="flex-wrapper flex-col flex-top flex-1 flex-stretch panel-wrapper">
+  <h1 class="page-title no-margin-top">Gestion des news</h1>
+  <div class="flex-wrapper flex-col">
+    <%= for news <- Webccg.Repo.all(News) do %>
+      <%= render CommonView, "news_template.html", news: news, can_delete: is_admin?(@conn) %>
+    <% end %>
+  </div>
+  <%= form_for News.changeset(%News{}), "/create_news", [class: "flex-wrapper flex-col"], fn f -> %>
+  <div class="flex-wrapper flex-col medium-width">
+    <label>Titre</label>
+    <%= text_input f, :title, class: "standard-input total-width" %>
+  </div>
+  <div class="flex-wrapper flex-col medium-width">
+    <label>Contenu</label>
+    <%= textarea f, :contents, class: "standard-textarea total-width least-height" %>
+  </div>
+  <%= submit("Créer la news") %>
+  <% end %>
+</div>

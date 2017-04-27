@@ -5,7 +5,7 @@ defmodule Webccg.PageController do
   # Default page rendering
   def display(conn, url) do
     conn
-      |> assign(:loginset, User.changeset(%User{}))
+      |> assign_logged_off(:loginset, User.changeset(%User{}))
       |> render(url)
   end
 
@@ -86,6 +86,16 @@ defmodule Webccg.PageController do
         else
           conn
         end
+    end
+  end
+
+  # Assign if logged off
+  def assign_logged_off(conn, key, value) do
+    case get_session(conn, :current_user) do
+      nil ->
+        conn |> assign(key, value)
+      user ->
+        conn
     end
   end
 
