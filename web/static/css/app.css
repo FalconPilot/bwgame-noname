@@ -489,7 +489,7 @@ footer > a > img {
 
 .card-wrapper:not(.generator) > p.card-desc {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   box-sizing: border-box;
   font-style: italic;
   color: #FFF;
