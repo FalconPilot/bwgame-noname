@@ -24,8 +24,8 @@ defmodule Webccg.Router do
 
     get "/cards", PageController, :cardlist
     get "/cards/:id", PageController, :card
-    post "/cards/reorder", CardController, :reorder_ids
 
+    post "/cards/reorder", CardController, :reorder_ids
     post "/cards/new", CardController, :new
     post "/cards/obtain", CardController, :obtain
     post "/cards/give", CardController, :give_card

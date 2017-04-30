@@ -44,22 +44,23 @@ defmodule Webccg.CardController do
   # Delete card
   def delete(conn, %{"delete-card" => params}) do
     if is_admin?(conn) do
-      case Integer.parse(params["id"]) do
-        {int, _point} ->
-          query = from(c in Card, [where: c.id == ^int])
-          case Repo.delete_all(query) do
-            {1, _} ->
-              conn
-                |> put_flash(:info, "Carte supprimée avec succès !")
-                |> redirect(to: "/cards")
-            {0, _} ->
-              conn
-                |> put_flash(:error, "La carte n'existe pas !")
-                |> redirect(to: "/cards")
-          end
-        {:error, _} ->
+      cardid = params["id"]
+      query = from(c in Card, [where: c.id == ^cardid])
+      case Repo.delete_all(query) do
+        {1, _} ->
+          Enum.each(Repo.all(User), fn(user) ->
+            user = Ecto.Changeset.change(user, %{
+              cards: remove_card(user.cards, cardid)
+            })
+            Repo.update!(user)
+          end)
+          # Redirect
           conn
-            |> put_flash(:error, "ID invalide !")
+            |> put_flash(:info, "Carte supprimée avec succès !")
+            |> redirect(to: "/cards")
+        {0, _} ->
+          conn
+            |> put_flash(:error, "La carte n'existe pas !")
             |> redirect(to: "/cards")
       end
     else
@@ -150,13 +151,14 @@ defmodule Webccg.CardController do
   # Reorder card IDs
   def reorder_ids(conn, _params) do
     if is_admin?(conn) do
-      cards = Enum.sort_by(Repo.all(Card), fn(x) ->
-        x.inserted_at
-      end)
+      query = from(c in Card, [order_by: c.inserted_at])
+      cards = Repo.all(query)
+      # Reordering operation
       Enum.each(Enum.with_index(cards), fn({x, i}) ->
         card = Ecto.Changeset.change(x, display_id: i + 1)
         Repo.update!(card)
       end)
+      # Redirect
       conn
         |> put_flash(:info, "ID des cartes réordonnés")
         |> redirect(to: "/cards")
@@ -168,10 +170,17 @@ defmodule Webccg.CardController do
   # Give card to user
   defp give_to(conn, user, card, url, notice \\ true) do
     # Update changeset
-    user = Ecto.Changeset.change(user, %{
-      last_obtained: Date.to_string(Date.utc_today),
-      cards: add_card(user.cards, card.id)
-    })
+    user =
+      if notice do
+        Ecto.Changeset.change(user, %{
+          last_obtained: Date.to_string(Date.utc_today),
+          cards: add_card(user.cards, card.id)
+        })
+      else
+        Ecto.Changeset.change(user, %{
+          cards: add_card(user.cards, card.id)
+        })
+      end
     # Update in Repo and redirect
     case Repo.update(user) do
       {:ok, new} ->
@@ -191,6 +200,24 @@ defmodule Webccg.CardController do
           |> put_flash(:error, "Erreur de base de données !")
           |> redirect(to: url)
     end
+  end
+
+  # Remove card from map
+  defp remove_card(list, id) do
+    remove_card(list, id, [])
+  end
+
+  defp remove_card([%{"id" => id, "amount" => amount}|t], cardid, acc) do
+    if id == cardid do
+      remove_card(t, cardid, acc)
+    else
+      h = %{"id" => id, "amount" => amount}
+      remove_card(t, cardid, [h|acc])
+    end
+  end
+
+  defp remove_card([], cardid, acc) do
+    Enum.reverse(acc)
   end
 
   # Add card to map
