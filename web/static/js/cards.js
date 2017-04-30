@@ -35,28 +35,6 @@ getClass("card-rarity").forEach(function(node) {
 });
 
 /*
-**  Card giving buttons
-*/
-
-getClass("give-card").forEach(function(node) {
-  node.addEventListener("click", function() {
-    /* Instance variables */
-    let overlayId = "overlay-give-card";
-    let win = document.getElementById(overlayId);
-    /* If overlay exist */
-    if (win) {
-      win.parentNode.removeChild(win);
-      if (this.name !== win.name) {
-        addOverlay(overlayId, this);
-      }
-    /* If overlay doesn't exist */
-    } else {
-      addOverlay(overlayId, this);
-    }
-  });
-});
-
-/*
 **  Card editing button
 */
 
@@ -86,7 +64,7 @@ getClass("edit-card").forEach(function(node) {
 **  Newcard notice close button
 */
 
-let newClose = document.getElementById('newcard-close');
+let newClose = getId('newcard-close');
 if (newClose) {
   getBody().style.overflow = 'hidden';
   newClose.addEventListener('click', function() {
@@ -97,68 +75,32 @@ if (newClose) {
 }
 
 /*
+**  Card overlay toggle button
+*/
+
+getName("overlay-toggle").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    toggleOverlay(getStaticPath(this.href, "#").substr(1));
+  });
+});
+
+/*
 **  Append overlay
 */
 
-function addOverlay(overlayId, item) {
-  /* Instance variables */
-  let wrapper = item.parentNode.parentNode;
-  let cid = getTag('input', wrapper)[0].value;
-
-  /* Global overlay */
-  let overlay = document.createElement('div');
-  overlay.id = overlayId;
-  overlay.className = 'flex-wrapper flex-col flex-stretch';
-  overlay.name = item.name;
-
-  /* Wrapping div */
-  let main = document.createElement('div');
-  main.className = 'flex-wrapper flex-col flex-1';
-
-  /* User input label */
-  let userLabel = document.createElement('label');
-  userLabel.className = "label-white";
-  userLabel.innerHTML = "Utilisateur";
-
-  /* User input */
-  let userInput = document.createElement('input');
-  userInput.className = 'standard-input';
-  userInput.addEventListener("input", function() {
-    let btn = getId('append-btn');
-    btn.href = "/giveto?cardid=" + btn.value + "&username=" + this.value;
-  });
-
-  /* Buttons header */
-  let header = document.createElement('div');
-  header.className = 'flex-wrapper flex-left';
-
-  /* Append btn */
-  let appendBtn = document.createElement('a');
-  appendBtn.className = 'img-btn';
-  appendBtn.id = "append-btn";
-  appendBtn.innerHTML = "<img src='/images/gui/give-btn.png'>";
-  appendBtn.value = cid;
-  appendBtn.href = "/giveto?cardid=" + cid + "&username=";
-
-  /* Close btn */
-  let closeBtn = document.createElement('button');
-  closeBtn.className = 'img-btn';
-  closeBtn.innerHTML = "<img src='/images/gui/delete-btn.png'>";
-  closeBtn.addEventListener('click', function() {
-    let overlay = document.getElementById(overlayId);
-    overlay.parentNode.removeChild(overlay);
-  });
-
-  /* Append children */
-  main.appendChild(userLabel);
-  main.appendChild(userInput);
-
-  header.appendChild(appendBtn);
-  header.appendChild(closeBtn);
-
-  overlay.appendChild(header);
-  overlay.appendChild(main);
-  wrapper.appendChild(overlay);
+function toggleOverlay(overlayId) {
+  let overlay = getId(overlayId);
+  /* Overlay exist */
+  if (overlay) {
+    if (overlay.style.display) {
+      overlay.style.display = null;
+    } else {
+      overlay.style.display = 'none';
+    }
+  /* Overlay doesn't exist */
+  } else {
+    console.log("Error : Overlay " + overlayId + " doesn't exist")
+  }
 }
 
 /*

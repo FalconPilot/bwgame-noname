@@ -11,7 +11,9 @@ defmodule Webccg.PageController do
 
   # Site index
   def index(conn, _params) do
-    display(conn, "index.html")
+    conn
+      |> assign(:news, Repo.all(News))
+      |> display("index.html")
   end
 
   # Userlist display

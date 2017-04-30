@@ -1,14 +1,16 @@
 <div class="flex-wrapper flex-col flex-1 noshrink">
   <%= if Enum.count(@cardlist) > 0 or is_admin?(@conn) do %>
     <%= if is_admin?(@conn) do %>
-      <%= link("Réordonner les IDs", to: "/cards/reorder", class: "standard-btn") %>
+      <%= form_for @conn, "/cards/reorder", [as: "cards-reorder", method: "post"], fn f -> %>
+        <%= submit("Réordonner les IDs", class: "standard-btn") %>
+      <% end %>
     <% end %>
     <div class="flex-wrapper flex-wrap">
       <%= if is_admin?(@conn) do %>
         <%= render CommonView, "card_form_template.html", cardform: @cardform, display_id: Enum.count(@cardlist) + 1 %>
       <% end %>
       <%= for card <- @cardlist do %>
-        <%= render CommonView, "card_template.html", card: card, can_modify: is_admin?(@conn) %>
+        <%= render CommonView, "card_template.html", conn: @conn, card: card, can_modify: is_admin?(@conn) %>
       <% end %>
     </div>
   <% else %>

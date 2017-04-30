@@ -22,12 +22,16 @@
       <!-- Obtain card -->
       <%= if user = get_user(@conn) do %>
         <%= if !obtained_card?(user) do %>
-          <%= link("Obtenir une carte", to: "/obtain?userid=#{user.id}", class: "standard-btn important") %>
+          <%= form_for @conn, "/cards/obtain", [as: "obtain-card", method: "post"], fn f -> %>
+            <%= hidden_input f, :id, value: user.id %>
+            <%= hidden_input f, :redirect_url, value: @conn.request_path %>
+            <%= submit("Obtenir une carte", class: "standard-btn important") %>
+          <% end %>
         <% end %>
       <% end %>
       <!-- Admin buttons -->
       <%= if is_admin?(@conn) do %>
-        <%= link(img_tag("/images/gui/admin-btn.png"), to: "/admin?page=admin_panel", class: "img-btn") %>
+        <%= link(img_tag("/images/gui/admin-btn.png"), to: "/admin", class: "img-btn") %>
       <% end %>
       <!-- Logged out buttons -->
       <%= if !logged_in?(@conn) do %>
@@ -74,7 +78,7 @@
         <h1 class="page-title no-margin-top">Carte obtenue !</h1>
         <div class="flex-1 flex-wrapper flex-col">
           <button class="standard-btn" id="newcard-close">Fermer</button>
-          <%= render CommonView, "card_template.html", card: card, can_modify: false %>
+          <%= render CommonView, "card_template.html", conn: @conn, card: card, can_modify: false %>
         </div>
       </div>
     <% end %>

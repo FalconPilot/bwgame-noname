@@ -31,7 +31,10 @@
   <div class="flex-wrapper">
     <%= if get_userid(@conn) == @pageuser.id do %>
       <%= if !obtained_card?(@pageuser) do %>
-        <%= link("Obtenir une carte", to: "/obtain?userid=#{get_userid(@conn)}", class: "standard-btn") %>
+        <%= form_for @conn, "/cards/obtain", [as: "obtain-card", method: "post"], fn f -> %>
+          <%= hidden_input f, :id, value: get_userid(@conn) %>
+          <%= submit("Obtenir une carte", class: "standard-btn") %>
+        <% end %>
       <% else %>
         <button disabled="true" class="standard-btn important">Carte obtenue</button>
       <% end %>
@@ -40,7 +43,7 @@
   <!-- Liste de cartes -->
   <div class="flex-wrapper flex-wrap">
     <%= for %{card: card, amount: amount} <- @pagecards do %>
-      <%= render CommonView, "card_template.html", card: card, url: static_path(@conn, card.image), can_modify: false, amount: amount %>
+      <%= render CommonView, "card_template.html", conn: @conn, card: card, url: card.image, can_modify: false, amount: amount %>
     <% end %>
   </div>
 </div>

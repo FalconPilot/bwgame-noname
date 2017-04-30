@@ -1,31 +1,25 @@
 defmodule Webccg.AdminController do
   use Webccg.Web, :controller
 
-  # Show admin-only page
-  def show(conn, %{"page" => page}) do
+  # Display if user is admin
+  def display_admin(conn, url, error_url \\ "/") do
     if is_admin?(conn) do
-      # Check if page exist
-      if File.exists?("./web/templates/admin/#{page}.html.eex") do
-        Webccg.PageController.display(conn, "#{page}.html")
-      else
-        conn
-          |> put_flash(:error, "La page \"#{page}.html.eex\" n'existe pas")
-          |> redirect(to: "/")
-      end
+      Webccg.PageController.display(conn, url)
     else
-      Webccg.PageController.redirect_admin(conn, "/")
+      Webccg.PageController.redirect_admin(conn, error_url)
     end
   end
 
-  # If no page has been provided
-  def show(conn, _params) do
-    if is_admin?(conn) do
-      conn
-        |> put_flash(:error, "Aucune page n'a été fournie")
-        |> redirect(to: "/")
-    else
-      Webccg.PageController.redirect_admin(conn, "/")
-    end
+  # Admin panel
+  def panel(conn, _params) do
+    display_admin(conn, "admin_panel.html")
+  end
+
+  # News panel
+  def news(conn, _params) do
+    conn
+      |> assign(:news, Repo.all(News))
+      |> display_admin("news_panel.html")
   end
 
   # Create a news
@@ -36,11 +30,11 @@ defmodule Webccg.AdminController do
         {:ok, _} ->
           conn
             |> put_flash(:info, "News créée avec succès")
-            |> redirect(to: "/admin?page=news_panel")
+            |> redirect(to: "/admin/news")
         {:error, _} ->
           conn
             |> put_flash(:error, "Échec de la création")
-            |> redirect(to: "/admin?page=news_panel")
+            |> redirect(to: "/admin/news")
       end
     else
       Webccg.PageController.redirect_admin(conn, "/")
@@ -48,10 +42,10 @@ defmodule Webccg.AdminController do
   end
 
   # Delete a news
-  def delete_news(conn, %{"id" => id}) do
+  def delete_news(conn, %{"delete-news" => params}) do
     if is_admin?(conn) do
-      url = "/admin?page=news_panel"
-      case Integer.parse(id) do
+      url = "/admin/news"
+      case Integer.parse(params["id"]) do
         {int, _point} ->
           query = from(n in News, [where: n.id == ^int])
           case Repo.delete_all(query) do
@@ -66,7 +60,7 @@ defmodule Webccg.AdminController do
           end
         _ ->
           conn
-            |> put_flash(:error, "Argument invalide")
+            |> put_flash(:error, "ID invalide")
             |> redirect(to: url)
       end
     else

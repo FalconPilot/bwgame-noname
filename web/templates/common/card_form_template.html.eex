@@ -1,4 +1,4 @@
-<%= form_for @cardform, "/newcard", [class: "card-wrapper generator", id: "card-form"], fn f -> %>
+<%= form_for @cardform, "/cards/new", [class: "card-wrapper generator", id: "card-form"], fn f -> %>
   <!-- Display id -->
   <%= hidden_input f, :display_id, value: @display_id %>
   <!-- Name -->

@@ -8,16 +8,38 @@
   </div>
   <div class="card-rarity flex-wrapper"><%= @card.rarity %></div>
   <p class="card-desc flex-1"><%= @card.description %></p>
-  <p class="flex-wrapper">
+  <div class="flex-wrapper">
     <span class="flex-1">Carte #<%= @card.display_id %></span>
     <%= if @can_modify do %>
+      <!-- Edit card -->
       <%= link(img_tag("/images/gui/edit-btn.png"), to: "#", class: "img-btn edit-card") %>
-      <%= link(img_tag("/images/gui/give-btn.png"), to: "#", class: "img-btn give-card") %>
-      <%= link(img_tag("/images/gui/delete-btn.png"), to: "/delete_card?cid=#{@card.id}", class: "img-btn") %>
+      <!-- Give card -->
+      <%= link(img_tag("/images/gui/give-btn.png"), to: "#overlay-#{@card.id}", class: "img-btn give-card", name: "overlay-toggle") %>
+      <!-- Delete card -->
+      <%= form_for @conn, "/cards/delete", [as: "delete-card", method: "delete", class: "flex-wrapper"], fn f ->%>
+        <%= hidden_input f, :id, value: @card.id %>
+        <%= submit(img_tag("/images/gui/delete-btn.png"), class: "img-btn") %>
+      <% end %>
     <% end %>
     <%= if assigns[:amount] do %>
       <span class="card-amount">x<%= @amount %></span>
     <% end %>
-  </p>
-  <input type="hidden" name="cid" value="<%= @card.id %>"/>
+  </div>
+  <%= if @can_modify do %>
+    <%= form_for @conn, "/cards/give", [as: "give-card", method: "post", class: "overlay-give-card flex-wrapper flex-col flex-stretch", id: "overlay-#{@card.id}", style: "display: none;"], fn f -> %>
+      <!-- Hidden inputs -->
+      <%= hidden_input f, :id, value: @card.id %>
+      <%= hidden_input f, :notice, value: false %>
+      <!-- Header -->
+      <div class="flex-wrapper flex-left">
+        <%= link(img_tag("/images/gui/delete-btn.png"), to: "#overlay-#{@card.id}", class: "img-btn", name: "overlay-toggle") %>
+        <%= submit(img_tag("/images/gui/give-btn.png"), class: "img-btn") %>
+      </div>
+      <!-- Username fields -->
+      <div class="flex-wrapper flex-col flex-1">
+        <label class="label-white">Utilisateur</label>
+        <%= text_input f, :username, [class: "standard-input"] %>
+      </div>
+    <% end %>
+  <% end %>
 </div>

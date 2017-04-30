@@ -42,26 +42,25 @@ defmodule Webccg.CardController do
   end
 
   # Delete card
-  def delete(conn, %{"cid" => card_id}) do
+  def delete(conn, %{"delete-card" => params}) do
     if is_admin?(conn) do
-      case Repo.get(Card, card_id) do
-        nil ->
-          conn
-            |> put_flash(:error, "La carte n'existe pas")
-            |> redirect(to: "/cards")
-
-        card ->
-          case Repo.delete card do
-            {:ok, _} ->
+      case Integer.parse(params["id"]) do
+        {int, _point} ->
+          query = from(c in Card, [where: c.id == ^int])
+          case Repo.delete_all(query) do
+            {1, _} ->
               conn
-                |> put_flash(:info, "Carte supprimée avec succès")
+                |> put_flash(:info, "Carte supprimée avec succès !")
                 |> redirect(to: "/cards")
-
-            {:error, _} ->
+            {0, _} ->
               conn
-                |> put_flash(:error, "La carte n'a pas pu être supprimée")
+                |> put_flash(:error, "La carte n'existe pas !")
                 |> redirect(to: "/cards")
           end
+        {:error, _} ->
+          conn
+            |> put_flash(:error, "ID invalide !")
+            |> redirect(to: "/cards")
       end
     else
       Webccg.PageController.redirect_admin(conn, "/cards")
@@ -69,9 +68,15 @@ defmodule Webccg.CardController do
   end
 
   # Get random card
-  def obtain(conn, %{"userid" => userid}) do
+  def obtain(conn, %{"obtain-card" => params}) do
+    userid = params["id"]
     if obtain_valid?(conn, userid) do
-      url = "/users/#{userid}"
+      url =
+        if params["redirect_url"] do
+          params["redirect_url"]
+        else
+          "/users/#{userid}"
+        end
       # Check if user exist
       case Repo.get(User, userid) do
         nil ->
@@ -124,7 +129,7 @@ defmodule Webccg.CardController do
   end
 
   # Public give card route
-  def give_card(conn, %{"cardid" => cardid, "username" => username}) do
+  def give_card(conn, %{"give-card" => %{"id" => cardid, "username" => username}}) do
     case Repo.get_by(Card, id: cardid) do
       nil ->
         conn
@@ -137,7 +142,7 @@ defmodule Webccg.CardController do
               |> put_flash(:error, "Utilisateur #{username} inexistant !")
               |> redirect(to: "/cards")
           user ->
-            give_to(conn, user, card, "/cards")
+            give_to(conn, user, card, "/cards", false)
         end
     end
   end
@@ -161,7 +166,7 @@ defmodule Webccg.CardController do
   end
 
   # Give card to user
-  defp give_to(conn, user, card, url) do
+  defp give_to(conn, user, card, url, notice \\ true) do
     # Update changeset
     user = Ecto.Changeset.change(user, %{
       last_obtained: Date.to_string(Date.utc_today),
@@ -170,10 +175,17 @@ defmodule Webccg.CardController do
     # Update in Repo and redirect
     case Repo.update(user) do
       {:ok, new} ->
-        conn
-          |> put_session(:current_user, new)
-          |> put_flash(:card, card)
-          |> redirect(to: url)
+        # Redirect
+        if notice do
+          conn
+            |> put_session(:current_user, new)
+            |> put_flash(:card, card)
+            |> redirect(to: url)
+        else
+          conn
+            |> put_session(:current_user, new)
+            |> redirect(to: url)
+        end
       {:error, _} ->
         conn
           |> put_flash(:error, "Erreur de base de données !")

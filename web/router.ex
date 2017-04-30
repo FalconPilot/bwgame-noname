@@ -23,13 +23,13 @@ defmodule Webccg.Router do
     post "/users/update", UserController, :update
 
     get "/cards", PageController, :cardlist
-    get "/cards/reorder", CardController, :reorder_ids
     get "/cards/:id", PageController, :card
+    post "/cards/reorder", CardController, :reorder_ids
 
-    post "/newcard", CardController, :new
-    get "/delete_card", CardController, :delete
-    get "/obtain", CardController, :obtain
-    get "/giveto", CardController, :give_card
+    post "/cards/new", CardController, :new
+    post "/cards/obtain", CardController, :obtain
+    post "/cards/give", CardController, :give_card
+    delete "/cards/delete", CardController, :delete
 
     get "/register", RegistrationController, :new
     post "/register", RegistrationController, :create
@@ -38,9 +38,10 @@ defmodule Webccg.Router do
     get "/logout", SessionController, :logout
 
     # Admin pages only
-    get "/admin", AdminController, :show
-    post "/create_news", AdminController, :create_news
-    get "/delete_news", AdminController, :delete_news
+    get "/admin", AdminController, :panel
+    get "/admin/news", AdminController, :news
+    post "/admin/news/create", AdminController, :create_news
+    delete "/admin/news/delete", AdminController, :delete_news
 
   end
 

@@ -498,8 +498,7 @@ footer > a > img {
   overflow: auto;
 }
 
-.card-wrapper:not(.generator) > p:not(.card-desc) {
-  width: 100%;
+.card-wrapper:not(.generator) > div > span {
   padding: 2px 5px;
   box-sizing: border-box;
   color: #FFF;
@@ -594,7 +593,7 @@ footer > a > img {
 **  Card overlay
 */
 
-#overlay-give-card {
+.overlay-give-card {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -626,4 +625,9 @@ footer > a > img {
   padding: 8px;
   font-size: 1em;
   font-style: italic;
+  color: #FFF;
+  text-align: center;
 }
+
+.news-wrapper > p,
+.news-wrapper > form { background-color: rgba(50, 50, 50, 0.5); }

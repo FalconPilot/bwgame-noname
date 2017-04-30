@@ -1,8 +1,8 @@
 <div class="flex-wrapper flex-col flex-top flex-1 panel-wrapper">
   <h1 class="page-title no-margin-top">News</h1>
   <div class="flex-wrapper flex-col total-width">
-    <%= for news <- Webccg.Repo.all(News) do %>
-      <%= render CommonView, "news_template.html", news: news, can_delete: false %>
+    <%= for news <- @news do %>
+      <%= render CommonView, "news_template.html", conn: @conn, news: news, can_delete: false %>
     <% end %>
   </div>
 </div>
