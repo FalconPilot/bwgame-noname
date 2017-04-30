@@ -47,9 +47,9 @@
         <% end %>
       <% end %>
       <!-- Common buttons -->
+      <%= link(img_tag("/images/gui/home-btn.png"), to: "/", class: "img-btn", title: "Accueil") %>
       <%= link(img_tag("/images/gui/cards-btn.png"), to: "/cards", class: "img-btn", title: "Cartes") %>
       <%= link(img_tag("/images/gui/userlist-btn.png"), to: "/users", class: "img-btn", title: "Utilisateurs") %>
-      <%= link(img_tag("/images/gui/home-btn.png"), to: "/", class: "img-btn", title: "Accueil") %>
       <!-- Logged in buttons -->
       <%= if user = get_user(@conn) do %>
         <%= link(img_tag("/images/gui/user-btn.png"), to: "/users/#{user.id}", class: "img-btn", title: "Profil") %>
