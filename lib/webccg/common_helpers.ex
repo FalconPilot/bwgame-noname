@@ -41,12 +41,8 @@ defmodule Webccg.CommonHelpers do
 
   # Check if user has obtained card today
   def obtained_card?(user) do
-    case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
-      :gt ->
-        false
-      _ ->
-        true
-    end
+    f = Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained))
+    f == :gt
   end
 
   # Check if user can modify
@@ -69,13 +65,9 @@ defmodule Webccg.CommonHelpers do
 
   # Check if character is vowel
   def is_vowel?(str) do
-    char = String.capitalize(str)
-    char == "A" or
-    char == "E" or
-    char == "I" or
-    char == "O" or
-    char == "U" or
-    char == "Y"
+    String.capitalize(str) in [
+      "A", "E", "I", "O", "U", "Y"
+    ]
   end
 
 end
