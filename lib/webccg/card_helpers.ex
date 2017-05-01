@@ -20,9 +20,7 @@ defmodule Webccg.CardHelpers do
   end
 
   # Get cards
-  def get_cards(cards) do
-    get_cards(cards, [])
-  end
+  def get_cards(cards), do: get_cards(cards, [])
 
   def get_cards([%{"id" => id, "amount" => amount}|t], acc) do
     case Repo.get_by(Card, id: id) do
