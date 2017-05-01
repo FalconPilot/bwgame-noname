@@ -7,11 +7,8 @@ defmodule Webccg.CommonHelpers do
 
   # Is user admin ?
   def is_admin?(conn) do
-    if user = get_user(conn) do
-      user.privilege >= 3
-    else
-      false
-    end
+    user = get_user(conn)
+    user and user.privilege >= 3
   end
 
   # Is user admin or defined user ?
