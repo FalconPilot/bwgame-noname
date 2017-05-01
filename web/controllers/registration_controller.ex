@@ -11,7 +11,7 @@ defmodule Webccg.RegistrationController do
     else
       conn
         |> assign(:changeset, User.changeset(%User{}))
-        |> Webccg.PageController.display("register.html")
+        |> display("register.html")
     end
   end
 
@@ -30,7 +30,7 @@ defmodule Webccg.RegistrationController do
         conn
           |> put_flash(:error, "Paramètres invalides !")
           |> assign(:changeset, changeset)
-          |> Webccg.PageController.display("register.html")
+          |> display("register.html")
     end
   end
 

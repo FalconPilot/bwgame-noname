@@ -38,6 +38,7 @@ defmodule Webccg.Web do
       # Libs
       alias Webccg.Repo
       alias Webccg.CardHelpers
+      import Webccg.ControllerHelpers
       import Webccg.CommonHelpers
 
       # Ecto

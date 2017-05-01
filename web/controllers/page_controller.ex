@@ -2,13 +2,6 @@ defmodule Webccg.PageController do
   use Webccg.Web, :controller
   alias Webccg.Repo
 
-  # Default page rendering
-  def display(conn, url) do
-    conn
-      |> assign_logged_off(:loginset, User.changeset(%User{}))
-      |> render(url)
-  end
-
   # Site index
   def index(conn, _params) do
     conn
@@ -77,34 +70,4 @@ defmodule Webccg.PageController do
       |> display("cardlist.html")
   end
 
-  # Assign if admin
-  defp assign_admin(conn, key, value) do
-    case get_session(conn, :current_user) do
-      nil ->
-        conn
-      user ->
-        if user.privilege >= 3 do
-          conn |> assign(key, value)
-        else
-          conn
-        end
-    end
-  end
-
-  # Assign if logged off
-  def assign_logged_off(conn, key, value) do
-    case get_session(conn, :current_user) do
-      nil ->
-        conn |> assign(key, value)
-      _user ->
-        conn
-    end
-  end
-
-  # Admin redirection
-  def redirect_admin(conn, url) do
-    conn
-      |> put_flash(:error, "Vous devez être administrateur")
-      |> redirect(to: url)
-  end
 end

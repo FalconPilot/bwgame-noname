@@ -4,9 +4,9 @@ defmodule Webccg.AdminController do
   # Display if user is admin
   def display_admin(conn, url, error_url \\ "/") do
     if is_admin?(conn) do
-      Webccg.PageController.display(conn, url)
+      display(conn, url)
     else
-      Webccg.PageController.redirect_admin(conn, error_url)
+      redirect_admin(conn, error_url)
     end
   end
 
@@ -37,7 +37,7 @@ defmodule Webccg.AdminController do
             |> redirect(to: "/admin/news")
       end
     else
-      Webccg.PageController.redirect_admin(conn, "/")
+      redirect_admin(conn, "/")
     end
   end
 
@@ -64,7 +64,7 @@ defmodule Webccg.AdminController do
             |> redirect(to: url)
       end
     else
-      Webccg.PageController.redirect_admin(conn, "/")
+      redirect_admin(conn, "/")
     end
   end
 

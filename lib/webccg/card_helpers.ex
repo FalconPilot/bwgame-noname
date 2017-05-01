@@ -37,4 +37,46 @@ defmodule Webccg.CardHelpers do
     Enum.reverse(acc)
   end
 
+  # Remove card from map
+  def remove_card(list, id) do
+    remove_card(list, id, [])
+  end
+
+  def remove_card([%{"id" => id, "amount" => amount}|t], cardid, acc) do
+    if id == cardid do
+      remove_card(t, cardid, acc)
+    else
+      h = %{"id" => id, "amount" => amount}
+      remove_card(t, cardid, [h|acc])
+    end
+  end
+
+  def remove_card([], _cardid, acc) do
+    Enum.reverse(acc)
+  end
+
+  # Add card to map
+  def add_card(list, id) do
+    add_card(list, id, [], false)
+  end
+
+  def add_card([%{"id" => id, "amount" => amount}|t], cardid, acc, changed) do
+    {amount, changed} =
+      if id == cardid do
+        {amount + 1, true}
+      else
+        {amount, changed}
+      end
+    h = %{"id" => id, "amount" => amount}
+    add_card(t, cardid, [h|acc], changed)
+  end
+
+  def add_card([], cardid, acc, changed) do
+    if !changed do
+      Enum.reverse([%{"id" => cardid, "amount" => 1}|acc])
+    else
+      Enum.reverse(acc)
+    end
+  end
+
 end

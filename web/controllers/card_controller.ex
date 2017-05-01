@@ -37,7 +37,7 @@ defmodule Webccg.CardController do
             |> redirect(to: "/cards")
       end
     else
-      Webccg.PageController.redirect_admin(conn, "/cards")
+      redirect_admin(conn, "/cards")
     end
   end
 
@@ -50,13 +50,13 @@ defmodule Webccg.CardController do
         {1, _} ->
           Enum.each(Repo.all(User), fn(user) ->
             user = Ecto.Changeset.change(user, %{
-              cards: remove_card(user.cards, cardid)
+              cards: CardHelpers.remove_card(user.cards, cardid)
             })
             Repo.update!(user)
           end)
           # Redirect
           conn
-            |> put_flash(:info, "Carte supprimée avec succès !")
+            |> put_flash(:info, "Carte ##{cardid} supprimée avec succès !")
             |> redirect(to: "/cards")
         {0, _} ->
           conn
@@ -64,7 +64,7 @@ defmodule Webccg.CardController do
             |> redirect(to: "/cards")
       end
     else
-      Webccg.PageController.redirect_admin(conn, "/cards")
+      redirect_admin(conn, "/cards")
     end
   end
 
@@ -134,7 +134,7 @@ defmodule Webccg.CardController do
     case Repo.get_by(Card, id: cardid) do
       nil ->
         conn
-          |> put_flash(:error, "Carte n°#{cardid} inexistante !")
+          |> put_flash(:error, "Carte ##{cardid} inexistante !")
           |> redirect(to: "/cards")
       card ->
         case Repo.get_by(User, username: username) do
@@ -163,7 +163,7 @@ defmodule Webccg.CardController do
         |> put_flash(:info, "ID des cartes réordonnés")
         |> redirect(to: "/cards")
     else
-      Webccg.PageController.redirect_admin(conn, "/cards")
+      redirect_admin(conn, "/cards")
     end
   end
 
@@ -174,11 +174,11 @@ defmodule Webccg.CardController do
       if notice do
         Ecto.Changeset.change(user, %{
           last_obtained: Date.to_string(Date.utc_today),
-          cards: add_card(user.cards, card.id)
+          cards: CardHelpers.add_card(user.cards, card.id)
         })
       else
         Ecto.Changeset.change(user, %{
-          cards: add_card(user.cards, card.id)
+          cards: CardHelpers.add_card(user.cards, card.id)
         })
       end
     # Update in Repo and redirect
@@ -193,54 +193,13 @@ defmodule Webccg.CardController do
         else
           conn
             |> put_session(:current_user, new)
+            |> put_flash(:info, "Carte \"#{card.name}\" donnée à \"#{new.username}\"")
             |> redirect(to: url)
         end
       {:error, _} ->
         conn
           |> put_flash(:error, "Erreur de base de données !")
           |> redirect(to: url)
-    end
-  end
-
-  # Remove card from map
-  defp remove_card(list, id) do
-    remove_card(list, id, [])
-  end
-
-  defp remove_card([%{"id" => id, "amount" => amount}|t], cardid, acc) do
-    if id == cardid do
-      remove_card(t, cardid, acc)
-    else
-      h = %{"id" => id, "amount" => amount}
-      remove_card(t, cardid, [h|acc])
-    end
-  end
-
-  defp remove_card([], cardid, acc) do
-    Enum.reverse(acc)
-  end
-
-  # Add card to map
-  defp add_card(list, id) do
-    add_card(list, id, [], false)
-  end
-
-  defp add_card([%{"id" => id, "amount" => amount}|t], cardid, acc, changed) do
-    {amount, changed} =
-      if id == cardid do
-        {amount + 1, true}
-      else
-        {amount, changed}
-      end
-    h = %{"id" => id, "amount" => amount}
-    add_card(t, cardid, [h|acc], changed)
-  end
-
-  defp add_card([], cardid, acc, changed) do
-    if !changed do
-      Enum.reverse([%{"id" => cardid, "amount" => 1}|acc])
-    else
-      Enum.reverse(acc)
     end
   end
 
