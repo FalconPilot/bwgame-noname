@@ -8,12 +8,12 @@ defmodule Webccg.CommonHelpers do
   # Is user admin ?
   def is_admin?(conn) do
     user = get_user(conn)
-    user and user.privilege >= 3
+    user && user.privilege >= 3
   end
 
   # Is user admin or defined user ?
   def admin_or_user?(conn, user) do
-    is_admin?(conn) or get_user(conn) == user
+    is_admin?(conn) || get_user(conn) == user
   end
 
   # Get current username
