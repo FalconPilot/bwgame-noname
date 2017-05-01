@@ -7,16 +7,13 @@ defmodule Webccg.CommonHelpers do
 
   # Is user admin ?
   def is_admin?(conn) do
-    if user = get_user(conn) do
-      user.privilege >= 3
-    else
-      false
-    end
+    user = get_user(conn)
+    user && user.privilege >= 3
   end
 
   # Is user admin or defined user ?
   def admin_or_user?(conn, user) do
-    is_admin?(conn) or get_user(conn) == user
+    is_admin?(conn) || get_user(conn) == user
   end
 
   # Get current username
@@ -44,12 +41,8 @@ defmodule Webccg.CommonHelpers do
 
   # Check if user has obtained card today
   def obtained_card?(user) do
-    case Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained)) do
-      :gt ->
-        false
-      _ ->
-        true
-    end
+    f = Date.compare(Date.utc_today, Date.from_iso8601!(user.last_obtained))
+    f == :gt
   end
 
   # Check if user can modify
@@ -72,13 +65,9 @@ defmodule Webccg.CommonHelpers do
 
   # Check if character is vowel
   def is_vowel?(str) do
-    char = String.capitalize(str)
-    char == "A" or
-    char == "E" or
-    char == "I" or
-    char == "O" or
-    char == "U" or
-    char == "Y"
+    String.capitalize(str) in [
+      "A", "E", "I", "O", "U", "Y"
+    ]
   end
 
 end

@@ -17,7 +17,7 @@ defmodule Webccg.ControllerHelpers do
         conn
       user ->
         if user.privilege >= 3 do
-          conn |> assign(key, value)
+          assign(conn, key, value)
         else
           conn
         end
@@ -28,7 +28,7 @@ defmodule Webccg.ControllerHelpers do
   def assign_logged_off(conn, key, value) do
     case get_session(conn, :current_user) do
       nil ->
-        conn |> assign(key, value)
+        assign(conn, key, value)
       _user ->
         conn
     end
